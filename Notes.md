@@ -1,7 +1,9 @@
 # Computer Network
 
+# Introduction (Part 1)
 ## Contents
 - [Computer Network](#computer-network)
+- [Introduction (Part 1)](#introduction-part-1)
   - [Contents](#contents)
   - [Introduction](#introduction)
     - [Human protocol vs. Network protocol](#human-protocol-vs-network-protocol)
@@ -39,6 +41,19 @@
       - [Problem](#problem)
     - [Packet Switching vs Circuit Switching](#packet-switching-vs-circuit-switching)
   - [Internet structure](#internet-structure)
+      - [How all ISP connected together?](#how-all-isp-connected-together)
+  - [Internet](#internet)
+    - [Network delays](#network-delays)
+      - [Queuing delay-revisited](#queuing-delay-revisited)
+      - [Packet Loss](#packet-loss)
+      - [End-to-end delay](#end-to-end-delay)
+    - [Throughput](#throughput)
+      - [Bandwidth vs Throughput](#bandwidth-vs-throughput)
+      - [Bottleneck throughput case](#bottleneck-throughput-case)
+      - [Transfer time](#transfer-time)
+  - [Network protocols](#network-protocols)
+    - [Internet protocol stack (TCP/IP Model)](#internet-protocol-stack-tcpip-model)
+    - [ISO/OSI reference model](#isoosi-reference-model)
 
 ## Introduction
 
@@ -373,6 +388,8 @@ When a packet travels through a network router/switch, there are four main types
 3. Transmission delay – time to push the bits onto the link.  
 4. Propagation delay – time for the signal to travel across the medium.
 
+For detailed refer here- [Network delay](#network-delays)
+
 ---
 
 ### Queuing delay and loss
@@ -533,3 +550,344 @@ Problem:
 ![ISP](/images/isp.png)
 
 **Option 2** – Connect each access ISP to a global transit ISP.
+Connection and provider ISP have economic aggrement.
+![ISP](/images/isp2.png)
+
+But if one global ISP is viable business, there will be competitors which also needs to be connected.
+
+![ISP](/images/isp3.png)
+
+**Internet Exchange Point (IXP)**
+
+- An IXP is a physical location where multiple ISPs and networks connect and exchange traffic directly.
+
+- Purpose: reduces cost and delay by avoiding sending data through higher-level ISPs unnecessarily.
+
+- ISPs peer at IXPs so local traffic stays local.
+
+Also regional networks may arise to connect access nets to
+ISPS. And content provider networks (e.g., Google, Microsoft, Akamai ) may run their own network, to bring services, content close to end users.
+
+![ISP](/images/isp4.png)
+
+#### How all ISP connected together?
+
+**Tier-1 ISPs**
+
+- The biggest global ISPs (like AT&T, Tata, NTT).
+
+- They interconnect with each other directly using peering agreements.
+
+- They form the “backbone” of the internet.
+
+**Tier-2 ISPs**
+
+- Regional or national ISPs.
+
+- They connect to Tier-1 ISPs to get global reach, and sometimes peer with each other.
+
+**Tier-3 ISPs**
+
+- Local ISPs (the ones we usually buy service from).
+
+- They connect to Tier-2 ISPs for internet access.
+
+**Content Provider Networks**
+
+- Large companies (Google, Microsoft, Amazon, Netflix, etc.) build their own private global networks instead of relying only on ISPs.
+
+- They connect their data centers and cache servers worldwide using high-speed fiber.
+
+- These networks often connect directly to ISPs or to IXPs, bypassing Tier-1 ISPs.
+
+---
+
+## Internet
+
+### Network delays
+When a packet travels from source to destination, it has to endure certain delays like - (Refere here:-  [Delays](#types-of-delay-in-packet-switched-networks) )
+
+1. Nodal processing delay
+2. Queuing delay
+3. Transmission delay
+4. Propagation delay
+
+![delay](/images/delay.png)
+
+**Example:** Driving a car from City A to City B
+
+**Nodal Processing Delay**
+
+- At each checkpoint (like a toll booth), the guard checks your ticket and decides where you should go.
+
+- That small inspection time = processing delay.
+
+**Queuing Delay**
+- If many cars are waiting at the toll booth, our car has to wait in line.
+
+- That waiting time = queuing delay.
+
+**Transmission Delay**
+
+- Imagine cars crossing the toll gate one by one at a fixed rate.
+
+- The time it takes for our whole car to pass through = transmission delay.
+
+- In networking, this is how long it takes to push all the packet bits onto the link.
+
+**Propagation Delay**
+
+- After the car leaves the toll, it drives along the highway to the next city.
+
+- The time it takes to travel the distance = propagation delay.
+
+So ```total nodal delay (d) = processing delay + queueing delay + transmission delay + propagation delay```
+
+#### Queuing delay-revisited
+
+Assume queue is very big.
+```
+a = average packet arrival rate(packets/second)
+R = transmission rate i.e link bandwidth (bps)
+L = Packet length(bits)
+```
+```
+The average rate at which bits arrive at the queue = La bits/sec
+```
+
+```
+Traffic intensity = La/R
+```
+
+```markdown
+# La/R > 1 : 
+avg. queuing delays becomes large
+
+# La/R ≤ 1 :
+nature of arriving packets impacts the queuing delay
+
+# La/R ~ 0 :
+avg. queueing delay small
+
+# La/R ~ 1 :
+average queuing delay gets larger
+```
+
+#### Packet Loss
+- queue (aka buffer) preceding link in buffer has finite capacity
+- when packet arrives to full queue, packet is dropped (aka
+lost)
+- The fraction of lost packets increases as the traffic
+intensity increases
+- lost packet may be retransmitted by previous node, by
+source end system, or not retransmitted at all
+
+![Loss](/images/loss.png)
+
+#### End-to-end delay
+
+It is the total delay a packet experiences from the source host to the destination host.
+
+$$
+d_{\text{end-to-end}} = N \times (d_{\text{proc}} + d_{\text{queue}} + d_{\text{trans}} + d_{\text{prop}})
+$$
+
+
+**where** 
+
+![Abreb](/images/abbreb.png)
+
+### Throughput
+
+The rate at which data is successfully delivered from sender to receiver, measured in bits per second (bps).
+
+It is of two types-
+1. **Instantaneous throughput** → the rate at a particular moment.
+
+2. **Average throughput** → total data delivered ÷ total time. If the file consists of ``F bits``, transfer takes ``T secs`` for a Host to receive all F bits, 
+``Average throughput = F/T bits per second``
+   
+
+**Car Analogy**
+
+- Imagine we’re moving trucks of goods from City A to City B.
+
+- Throughput = how many trucks full of goods actually arrive at City B per second.
+
+- Even if the road is wide (high bandwidth), traffic jams (congestion) or slow tolls (processing/transmission limits) can reduce the actual throughput.
+
+#### Bandwidth vs Throughput
+
+**Bandwidth** = the maximum capacity of a link (like the width of a highway).
+
+**Throughput** = the actual rate at which data is delivered end-to-end (like the number of cars that actually reach the destination per second).
+
+🔹 **Key difference:**
+
+- Bandwidth is a theoretical upper limit.
+
+- Throughput depends on real conditions: congestion, queuing, protocol overhead, etc.
+
+#### Bottleneck throughput case
+
+![Throughput](/images/throughput.png)
+
+#### Transfer time
+
+**Transfer time**: Time taken to move a message from sender to receiver over a network link.It includes both transmission time and propagation time.
+
+**Case 1: Link-level transfer time**
+
+- Used when we are analyzing one link between two nodes.
+
+- We care about both:
+
+  - Transmission time (putting bits on the link).
+
+  - Propagation delay (signal traveling in the medium).
+
+- Example: LAN cable between two computers.
+
+```Transfer Time = Transmission Time + Propagation Delay```
+
+![Formula2](/images/formula2.png)
+
+**where**
+
+- **L :** file size or message size in bits 
+- **R :** link bandwidth (in bps) or transmission rate (in bps)
+- **D :** distance between sender and receiver (meters)
+- **S :** propagation speed (m/s, close to speed of light in fiber)
+
+**Case 2: End-to-end file transfer (client–server model)**
+- Used when sending a whole file over a network.
+
+- We care about the slowest rate between the sender and the network.
+
+- Propagation delay is often tiny compared to file size, so it’s ignored here.
+
+- Example: downloading a movie — bottleneck is our internet speed, not the distance to the server.
+  
+
+$$
+T = \frac{F}{\min(R_s, R_c)}
+$$
+
+
+where:  
+- $F$  = File size (in bits)  
+- $R_s$ = Sender rate (bps)  
+- $R_c$ = Channel rate / link capacity (bps)  
+
+
+**Example**:  Downloading MP3 file of F=32 million bits Rs=2Mbps, Rc =1Mbps
+
+Time needed to transfer the file = 32/1=32 secs
+
+Suppose there are N links then the throughput will be:
+Min(R1, R2,...,RN).
+
+---
+
+## Network protocols
+
+### Internet protocol stack (TCP/IP Model)
+When taken together, the protocols of various layers are called the protocol stack.
+
+The Internet protocol stack (TCP/IP Model) has 4 layers that handle end-to-end communication over the Internet:
+
+```markdown
+
+                | TCP/IP Layers |
+                |---------------|
+                | Application   |
+                | Transport     |
+                | Internet      |
+                | Link          |
+                | Physical      |
+
+```
+
+**Application Layer**
+
+- Provides services directly to applications.
+
+- Combines OSI’s Application, Presentation, and Session layers.
+
+- Examples: HTTP, FTP, SMTP, DNS.
+
+**Transport Layer**
+
+- Provides end-to-end communication between hosts.
+
+- Ensures reliability if needed.
+
+- Examples: TCP (reliable), UDP (unreliable).
+
+**Internet Layer**
+
+- Responsible for addressing and routing packets across networks.
+
+- Example: IP (Internet Protocol), ICMP.
+
+**Link Layer (Network Access Layer)**
+
+- Handles node-to-node delivery over physical media.
+
+- Combines OSI’s Data Link + Physical layers.
+
+- Examples: Ethernet, Wi-Fi, PPP.
+
+**Physical Layer**
+
+- Transmits raw bits (0s and 1s) over a physical medium like copper wires, fiber optic cables, or wireless channels.
+
+- Focus: How the signal travels — electrical, optical, or radio signals.
+
+- No concern for: addressing, routing, or reliability.
+
+**Quick Analogy:**
+
+**Application** = Apps talking to each other (like sending emails or browsing).
+
+**Transport** = Ensures your message reaches correctly (like a courier with a tracking number).
+
+**Internet** = Decides the route across cities/countries (like GPS for data).
+
+**Link** = Roads and vehicles between nearby locations (physical transmission).
+
+**Physical layer** = the roads or cables that cars (data) travel on.
+We don’t care about the destination or traffic rules here, just that the cars can move from point A to B.
+
+### ISO/OSI reference model
+
+
+| OSI Model Layers |
+|-----------------|
+| Application     |
+| Presentation    |
+| Session         |
+| Transport       |
+| Network         |
+| Data Link       |
+| Physical        |
+
+
+**Presentation layer:**  allow applications to interpret meaning of data, e.g., encryption, compression, machine-specific conventions.
+
+**Session layer:** synchronization, checkpointing, recovery of data
+exchange.
+
+
+**Comparison between OSI and TCP/IP model-**
+
+
+| OSI Model Layer      | TCP/IP Layer      |
+|---------------------|-----------------|
+| Application         | Application     |
+| Presentation        | Application     |
+| Session             | Application     |
+| Transport           | Transport       |
+| Network             | Internet        |
+| Data Link           | Link            |
+| Physical            | Link / Physical |
