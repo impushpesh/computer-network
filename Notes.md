@@ -54,6 +54,7 @@
   - [Network protocols](#network-protocols)
     - [Internet protocol stack (TCP/IP Model)](#internet-protocol-stack-tcpip-model)
     - [ISO/OSI reference model](#isoosi-reference-model)
+      - [OSI model in brief:](#osi-model-in-brief)
 
 ## Introduction
 
@@ -878,6 +879,57 @@ We don’t care about the destination or traffic rules here, just that the cars 
 **Session layer:** synchronization, checkpointing, recovery of data
 exchange.
 
+#### OSI model in brief:
+
+**Application layer:**
+- It is the topmost layer. All protocol work here. (widely used- HTTP)
+- Provides interface to access the network.
+  
+**Presentation layer:**
+- Takes care of how data will be presented to reciever. Eg- Consider the case where sender knows english while reciever knows spanish.
+- Technically, at the sender side, this layer translates the data format used by the application layer to the common format and at the reciever side, this layer translates the common format into the format used by the application layer at the reciever side.
+
+**Session layer:**
+- Its main role is to maintain a connection until sender sends the data and reciever recieves the data.
+- It also reports about the error coming from the upper layers.
+  
+**Note**: Application layer, Presentation layer and Session layer are part of software.
+
+**Transport layer:**
+- It divides the data into segments.
+- It has two protocols- 
+  - **TCP**
+    - It gives all info.
+    - If we want to send data with proper acknowledgement that reciever has recieved the data.
+  - **UDP**
+    - We use this protocol when we want to send data faster. We won't be able to know whether the data has been sent or not.
+
+**Network layer:**
+- It divides data into packets.
+- It stores the IP address of sender and reciever.
+- Router is present at this layer.
+- It also decides how the data should be sent so the reciever recieves fast.
+Function: 
+- Logical addressing
+- Routing
+- Packet forwarding
+- Fragmentation
+- Error handeling
+  
+**Datalink layer:**
+- It maintains the speed of transfer and recieving of data between sender and reciever.
+- It removes the error.
+- It recieves the data from network layer and converts the data into data frames and then attach the physical address to these frames which are sent to physical layer.
+
+**Physical layer:**
+- Lowest layer
+- Here the data gets converted to bits(0 and 1).
+- Hubs, switch etc. are present here.
+- It transmits data either in the form of electrical/optical or mechanical.
+
+**Note**: Network layer, Datalink layer and physical lare are part of hardware.
+
+![Osi model](/images/osi.jpg)
 
 **Comparison between OSI and TCP/IP model-**
 
