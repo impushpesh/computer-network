@@ -55,6 +55,29 @@
     - [Internet protocol stack (TCP/IP Model)](#internet-protocol-stack-tcpip-model)
     - [ISO/OSI reference model](#isoosi-reference-model)
       - [OSI model in brief:](#osi-model-in-brief)
+- [Application Layer (Part-2)](#application-layer-part-2)
+  - [Introduction](#introduction-1)
+      - [Client-Server Model](#client-server-model)
+      - [Peer- Peer architecture (P2P model)](#peer--peer-architecture-p2p-model)
+      - [Process Communication](#process-communication)
+      - [Sockets](#sockets)
+      - [Addressing processes](#addressing-processes)
+  - [Common Application Layer Protocols](#common-application-layer-protocols)
+      - [HTTP (HyperText Transfer Protocol)](#http-hypertext-transfer-protocol)
+      - [SMTP (Simple Mail Transfer Protocol)](#smtp-simple-mail-transfer-protocol)
+      - [IMAP (Internet Message Access Protocol) / POP3 (Post Office Protocol)](#imap-internet-message-access-protocol--pop3-post-office-protocol)
+      - [DNS (Domain Name System)](#dns-domain-name-system)
+      - [FTP (File Transfer Protocol)](#ftp-file-transfer-protocol)
+      - [DHCP (Dynamic Host Configuration Protocol)](#dhcp-dynamic-host-configuration-protocol)
+      - [SNMP (Simple Network Management Protocol)](#snmp-simple-network-management-protocol)
+      - [Telnet / SSH](#telnet--ssh)
+  - [Connection-Oriented vs Connectionless Communication](#connection-oriented-vs-connectionless-communication)
+  - [HTTP connection](#http-connection)
+    - [Types of HTTP connection](#types-of-http-connection)
+      - [Non-persistent HTTP](#non-persistent-http)
+      - [Persistent HTTP](#persistent-http)
+    - [Difference between Persistent and Non-Persistent HTTP](#difference-between-persistent-and-non-persistent-http)
+    - [HTTP Response Time \& RTT](#http-response-time--rtt)
 
 ## Introduction
 
@@ -943,3 +966,259 @@ Function:
 | Network             | Internet        |
 | Data Link           | Link            |
 | Physical            | Link / Physical |
+
+---
+
+# Application Layer (Part-2)
+
+## Introduction
+
+**Recap**- It comprises of software.  All protocol works here. (widely used- HTTP). Provides interface to access the network.
+
+**App like**-  Gmail, Web browsers, Emails etc.
+
+#### Client-Server Model
+| Client              | Server      |
+|---------------------|-----------------|
+| Communication with server         | Always on host     |
+| Can have dynamic IP address        | Permanent IP address     |
+| Do not communicate directly with each other             | May communicate with each other.     |
+
+**Communication** 
+- One-to-many relationship (server serves many clients).
+- Clients depend on the server; if the server goes down, clients can’t access the service.
+
+#### Peer- Peer architecture (P2P model)
+
+In a peer-to-peer model, each device (peer) in the network acts as both a client and a server. Peers share resources (files, processing power, etc.) directly with each other without needing a centralized server.
+
+- Each peer can request and provide services.
+
+- Usually have dynamic IP addresses.
+
+- No dedicated central server (though sometimes hybrid P2P has a small directory server).
+
+**Communication**:
+
+- Many-to-many relationship (peers talk directly).
+
+- Scales well because each new peer can contribute resources.
+
+- Reliability improves if multiple peers hold the same data.
+
+**Examples**:
+
+- File sharing (BitTorrent).
+
+- Voice/video apps (Skype used hybrid P2P earlier).
+
+- Blockchain and cryptocurrencies (Bitcoin, Ethereum).
+
+#### Process Communication
+Process communication means the exchange of data and information between two or more processes (programs in execution). This can happen within the same computer or across different computers in a network.
+
+**Types**:
+
+- **Inter-Process Communication (IPC)** – when processes communicate within the same machine.
+
+  - Shared Memory: Processes share a common memory space to exchange information.
+
+  - Message Passing: Processes send and receive messages via the OS.
+
+- **Network Communication (Remote IPC)** – when processes communicate across different machines using protocols.
+
+  - Uses sockets, RPC (Remote Procedure Call), or higher-level protocols (HTTP, gRPC, etc.).
+
+**Key Points**:
+
+- Synchronization is important (to avoid race conditions in shared memory).
+
+- Message passing is safer but may be slower than shared memory.
+
+- Used in client-server and P2P communication.
+
+#### Sockets
+A socket is an endpoint for communication between two processes over a network.
+
+- One process writes to the socket, the other reads from it.
+
+- Works like a door that lets data in and out of your computer over the network.
+
+**Types of Sockets:**
+
+- **Stream Sockets (TCP)**:
+
+  - Connection-oriented (like a phone call).
+
+  - Reliable → ensures data arrives in order, without loss.
+
+  - Used in web browsing, email, file transfers.
+  
+  - Acknowledgement
+
+- **Datagram Sockets (UDP)**:
+
+  - Connectionless (like sending letters without confirmation).
+
+  - Faster, but data may be lost or arrive out of order.
+
+  - Used in video streaming, online gaming, VoIP.
+  
+  - No acknowledgement
+
+- **Raw Sockets**:
+
+  - Allow direct access to lower-layer protocols (like IP).
+
+  - Mainly used for testing or building custom protocols.
+
+Key Points:
+
+- Each socket is identified by IP address + port number.
+
+- Server sockets: listen for incoming connections.
+
+- Client sockets: actively connect to a server.
+
+#### Addressing processes
+Addressing processes means identifying the sender and receiver in a network so data can be delivered correctly.
+In the Internet, this requires two pieces of information:
+
+- IP Address:  identifies the host (which computer).
+
+- Port Number:  identifies the specific process (which application) on that host.
+
+**Key Points:**
+
+- IP address = "which machine" in the network.
+
+- Port number = "which door/service" on that machine.
+
+  - Together (IP, Port) = socket address.
+
+- Example: 192.168.1.5:80 -
+
+  - Host = computer with IP 192.168.1.5.
+
+  - Process = web server (port 80 for HTTP).
+
+## Common Application Layer Protocols
+
+#### HTTP (HyperText Transfer Protocol)
+- Used for web browsing (transfer of web pages).  
+- Stateless (server maintains no information about past client requests ), request–response model.  
+- Runs on port 80 (HTTPS on port 443 with encryption).  
+- For detailed, refer here- [Http](#http)
+
+#### SMTP (Simple Mail Transfer Protocol)
+- Used for sending emails.  
+- Works with IMAP/POP3 for receiving.  
+- Runs on port 25.  
+
+#### IMAP (Internet Message Access Protocol) / POP3 (Post Office Protocol)
+- Used by mail clients to receive emails from mail servers.  
+- IMAP (port 143) → keeps emails on server, sync across devices.  
+- POP3 (port 110) → downloads emails, usually deletes from server.  
+
+#### DNS (Domain Name System)
+- Translates domain names (like google.com) into IP addresses.  
+- Runs on port 53.  
+
+#### FTP (File Transfer Protocol)
+- Transfers files between client and server.  
+- Uses port 21 (control) and 20 (data).  
+
+#### DHCP (Dynamic Host Configuration Protocol)
+- Assigns IP addresses automatically to devices.  
+- Runs on ports 67 (server) and 68 (client).  
+
+#### SNMP (Simple Network Management Protocol)
+- Used to monitor and manage devices in a network (like routers, switches).  
+- Runs on port 161.  
+
+#### Telnet / SSH
+- Remote login protocols.  
+- Telnet (port 23) is insecure, SSH (port 22) is secure.  
+
+## Connection-Oriented vs Connectionless Communication
+
+**Definition:**  
+- **Connection-Oriented:** A type of communication where a **dedicated connection** is established between sender and receiver before data is transmitted.  
+- **Connectionless:** Communication where data is sent **without establishing a prior connection**. Each packet is independent.  
+
+---
+
+**Key Points:**  
+
+| Feature | Connection-Oriented | Connectionless |
+|---------|------------------|----------------|
+| **Setup** | Connection must be established first | No setup required |
+| **Reliability** | Reliable delivery (acknowledgements, retransmission) | Unreliable, may lose packets |
+| **Order** | Guarantees order of data | No guarantee of order |
+| **Overhead** | Higher (connection setup, teardown, acknowledgements) | Lower (no setup) |
+| **Speed** | Slower due to overhead | Faster due to minimal overhead |
+| **Examples** | TCP, FTP, HTTP | UDP, DNS, streaming |
+
+---
+
+**Analogy:**  
+
+- **Connection-Oriented:** Like making a **phone call** — you dial, establish connection, talk, then hang up.  
+- **Connectionless:** Like sending **letters/postcards** — you just send them, each one is independent, may get lost or arrive out of order.  
+
+---
+
+**In short:**  
+- Connection-oriented = reliable, slower, needs setup (TCP).  
+- Connectionless = fast, no setup, may be unreliable (UDP).  
+
+## HTTP connection
+- It is web's application layer protocol.
+- Client-server model.
+- HTTP use TCP (Transmission Control protocol)
+  - Client initiates TCP connection **--->** server accepts TCP connection **--->** HTTP message gets exchanged between browser (HTTP client) and web browser (HTTP server) **--->** TCP connection is closed.
+
+### Types of HTTP connection
+
+#### Non-persistent HTTP
+- TCP connection is opened
+- At most one object (like image, script) can be sent over TCP connection.
+- TCP connection is closed.
+- Slower speed because of multiple hanshakes.
+
+#### Persistent HTTP
+- TCP connection is opened
+- multiple objects can be sent over single TCP connection between client, and server.
+- TCP connection is closed.
+- Speed is fast because it avoids repeated handshakes.
+
+### Difference between Persistent and Non-Persistent HTTP
+
+| Feature | Non-Persistent HTTP | Persistent HTTP |
+|---------|-------------------|----------------|
+| **TCP Connection** | A new TCP connection is opened for each object | Single TCP connection is used for multiple objects |
+| **Objects per Connection** | At most one object (like image, script) can be sent | Multiple objects can be sent over the same connection |
+| **Connection Close** | TCP connection is closed after sending one object | TCP connection is closed only after all objects are sent |
+| **Speed** | Slower due to multiple handshakes | Faster because repeated handshakes are avoided |
+| **Overhead** | High, due to repeated TCP setup/teardown | Low, only one TCP setup/teardown for multiple objects |
+| **RTT Requirement** | Multiple RTTs per object | Fewer RTTs since connection is reused |
+| **Server Load** | Higher, more connections to handle | Lower, fewer connections to manage |
+| **HTTP Version** | HTTP/1.0 typically | HTTP/1.1 and later |
+| **Efficiency** | Less efficient for pages with many objects | More efficient for pages with many objects |
+
+
+### HTTP Response Time & RTT
+
+- **HTTP Response Time**: The total time taken from when a client sends an HTTP request until it receives the complete response from the server.
+
+- **RTT (Round-Trip Time)**: The time it takes for a packet to travel from client → server and back → client.
+
+**HTTP response time (per object):**
+- one RTT to initiate TCP connection
+- one RTT for HTTP request and first few bytes of HTTP response to return
+- object/file transmission time
+
+Non-persistent HTTP response time =  2RTT + file transmission time
+
+![rtt](/images/rtt.png)
+
