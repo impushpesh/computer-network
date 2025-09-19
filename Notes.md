@@ -81,6 +81,23 @@
     - [HTTP request methods-](#http-request-methods-)
     - [Cookies](#cookies)
     - [Web Caches (Proxy Servers)](#web-caches-proxy-servers)
+    - [HTTP 1 VS HTTP 2](#http-1-vs-http-2)
+      - [HTTP 1.1](#http-11)
+      - [HTTP/2 \[RFC 7540, 2015\]](#http2-rfc-7540-2015)
+    - [HTTP 2 vs HTTP 3](#http-2-vs-http-3)
+  - [Email](#email)
+    - [SMTP- Simple Mail Transfer Protocol](#smtp--simple-mail-transfer-protocol)
+      - [Key Points:](#key-points)
+      - [Three phases of transfer-](#three-phases-of-transfer-)
+      - [How it works (simple analogy):](#how-it-works-simple-analogy)
+      - [How it works (More technically):](#how-it-works-more-technically)
+      - [In short:](#in-short)
+    - [Retrieving mails- Mail access protocols](#retrieving-mails--mail-access-protocols)
+      - [**POP3 (Post Office Protocol version 3)**](#pop3-post-office-protocol-version-3)
+      - [**IMAP (Internet Message Access Protocol)**](#imap-internet-message-access-protocol)
+      - [Webmail (HTTP/HTTPS based)](#webmail-httphttps-based)
+  - [DNS- Domain Name System](#dns--domain-name-system)
+    - [DNS: a distributed, hierarchical database](#dns-a-distributed-hierarchical-database)
 
 ## Introduction
 
@@ -1317,3 +1334,195 @@ A **web cache** (or proxy server) is a network entity that stores copies of web 
 - **Cost savings** → less bandwidth usage.  
 
 
+### HTTP 1 VS HTTP 2
+
+**Key goal:** Decreased delay in multi-object HTTP requests  
+
+#### HTTP 1.1
+- Introduced multiple, pipelined GETs over a single TCP connection.  
+- Server responds **in-order** (FCFS: first-come-first-served) to GET requests.  
+- **Head-of-line (HOL) blocking:** Small objects may wait behind large objects.  
+- Loss recovery (retransmitting lost TCP segments) **stalls object transmission**.  
+
+**Example:**  
+Client requests 3 files in order:  
+1. Video (5 GB)  
+2. Image (4 KB)  
+3. Audio (1 MB)  
+
+- HTTP 1.1 serves **FCFS**, so small image/audio must wait until video is transmitted.  
+
+
+#### HTTP/2 [RFC 7540, 2015]
+- Increased flexibility at server in sending objects to client.  
+- Methods, status codes, most header fields unchanged from HTTP 1.1.  
+- Transmission order of requested objects based on **client-specified priority** (not FCFS).  
+- Can **push unrequested objects** to client.  
+- Divides objects into **frames** and schedules them to mitigate HOL blocking.  
+
+**Example:**  
+Same 3 files as above → objects are divided into frames, allowing **smaller objects to be delivered faster** even if requested after larger objects.  
+
+
+
+### HTTP 2 vs HTTP 3
+
+- HTTP/3 adds **security**, **per-object error handling**, and **congestion control over UDP**.  
+- Eliminates HOL blocking at TCP level by using **QUIC protocol** over UDP.  
+- Faster, more reliable performance in lossy networks compared to HTTP/2 over TCP.  
+
+## Email
+Three things-
+1. User Agent (We, the users)
+2. Mail servers (mailbox, message queue)
+3. SMTP (Simple Mail Transfer Protocol)
+
+### SMTP- Simple Mail Transfer Protocol
+
+**SMTP** is the standard protocol used to send emails from a client to a mail server or between mail servers. It ensures that email messages are properly routed from the sender to the recipient’s server.
+
+#### Key Points:
+
+- **Works at the application layer** of the Internet protocol stack.
+- **Usually uses TCP port 25** (for server-to-server) or 587/465 (for client-to-server with authentication/secure connection).
+- **SMTP handles only sending emails**, not retrieving them (retrieval uses POP3 or IMAP).
+- **Supports text-based commands** like `HELO`, `MAIL FROM`, `RCPT TO`, `DATA`, `QUIT`.
+- **Can be combined with TLS/SSL** for secure email transmission.
+- **Most email clients** (like Outlook, Gmail) use SMTP to send mail to their provider’s outgoing mail server.
+
+#### Three phases of transfer-
+- SMTP handshaking(greeting)
+- SMTP transfer of messages
+- SMTP closure
+
+#### How it works (simple analogy):
+
+Imagine sending a letter via postal service:
+
+1. **You write a letter →** SMTP prepares the email with sender, recipient, and content.
+2. **Go to local post office →** SMTP client connects to the mail server.
+3. **Server checks the address →** Mail server validates the recipient address.
+4. **Mail moves between post offices →** SMTP servers communicate to transfer the email to the recipient’s server.
+5. **Delivered to recipient’s mailbox →** Recipient retrieves it using IMAP/POP3.
+
+#### How it works (More technically):
+1. A Person (lets say Pushpesh) uses user agent (say gmail), to compose an email and send it  to his friend `Oggy@gmail.com.`
+2. Pushpesh sends message to his mail server (google in this case) using SMTP- The message gets placed in message queue.
+3. Client side of SMTP (Pushpesh in this case) at mail server opens a TCP connection with Oggy's mail server.
+4. Mail is sent to Oggy's server via TCP connection.
+5. Oggy's mail server places the message in Oggy's mailbox.
+6. Oggy then can read the mail from his mailbox using his user agent (Gmail, outlook) which retrieves it via **IMAP** or **POP3**.
+  
+SMTP and HTTP difference and similarities-
+
+SMTP-
+- Used to send emails from a client to a server or between servers
+- Application layer
+- Connection Type :Can be persistent but usually one-way from client to server
+- State Stateful in sequence of commands (HELO → MAIL FROM → RCPT TO → DATA)
+
+HTTP-
+- Used to transfer web resources like HTML pages, images, or API data
+- Application layer
+- Can be persistent or non-persistent, supports request-response communication
+- Stateless (each HTTP request is independent unless cookies/sessions used)
+
+
+The SMTP design can be pictured as:
+
+```
+                    +----------+                +----------+
+        +------+    |          |                |          |
+        | User |<-->|          |      SMTP      |          |
+        +------+    |  Client- |Commands/Replies| Server-  |
+        +------+    |   SMTP   |<-------------->|    SMTP  |    +------+
+        | File |<-->|          |    and Mail    |          |<-->| File |
+        |System|    |          |                |          |    |System|
+        +------+    +----------+                +----------+    +------+
+                    SMTP client                SMTP server
+```
+
+When an SMTP client has a message to transmit, it establishes a two-
+way transmission channel to an SMTP server.  The responsibility of an
+SMTP client is to transfer mail messages to one or more SMTP servers,
+or report its failure to do so.
+
+#### In short:
+
+**SMTP =** protocol to send emails, uses TCP, works with text commands, handles only outgoing mail, often combined with POP3/IMAP for receiving.
+
+### Retrieving mails- Mail access protocols
+
+Mail access protocols are used by email clients to retrieve messages from a mail server so users can read their emails. Unlike SMTP, which only sends emails, these protocols allow clients to download or view incoming mail.
+
+**Common Mail Access Protocols:**
+
+#### **POP3 (Post Office Protocol version 3)**
+
+- Used to download emails from the server to your device.
+
+- Works on TCP port 110 (non-secure) or 995 (secure/SSL).
+
+- Default behavior: emails are deleted from the server after download (can be configured to keep a copy).
+
+- Simple and lightweight, but not suitable for accessing mail from multiple devices.
+
+**Analogy**: Like collecting letters from your mailbox and taking them home—once taken, the server doesn’t keep them by default.
+
+#### **IMAP (Internet Message Access Protocol)**
+
+- Allows viewing and managing emails directly on the server.
+
+- Works on TCP port 143 (non-secure) or 993 (secure/SSL).
+
+- Emails stay on the server, so you can access them from multiple devices.
+
+- Supports folders, flags, search, and synchronization.
+
+**Analogy**: Like reading letters at the post office without taking them home—available anytime, anywhere.
+
+#### Webmail (HTTP/HTTPS based)
+- Emails can be accessed via a web browser using HTTPS.
+
+- Protocols like IMAP/POP3 run in the backend, but user sees a web interface.
+
+- **Examples:** Gmail, Yahoo Mail, Outlook.com.
+
+**Analogy**: Like visiting a digital post office online, reading and managing mail instantly.
+
+**In short:**
+
+**POP3** = download emails, simple, removes from server.
+
+**IMAP** = access emails on server, multi-device friendly, syncs folders.
+
+**Webmail** = browser-based email access, uses IMAP/POP3 in backend.
+
+## DNS- Domain Name System
+
+- Its an Application layer protocol
+
+- DNS is the system that translates human-readable domain names (like www.google.com
+) into IP addresses (like 142.250.190.14) that computers use to locate each other on the Internet.
+
+**Key Points:**
+
+- Works at the application layer.
+
+- Like the Internet’s phonebook, mapping names to addresses.
+
+- Helps users avoid remembering numeric IP addresses.
+
+- Uses a hierarchical system:
+
+- Root DNS servers → top-level domains (TLDs) → authoritative name servers → local resolver.
+
+- Uses UDP (port 53) for most queries and TCP for larger transfers.
+
+- Supports caching to speed up repeated queries.
+
+**In short:**
+
+DNS = Internet’s phonebook, translates domain names to IP addresses, uses hierarchical servers, works over UDP/TCP, caches responses for efficiency.
+
+### DNS: a distributed, hierarchical database
