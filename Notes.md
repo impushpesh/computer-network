@@ -78,6 +78,9 @@
       - [Persistent HTTP](#persistent-http)
     - [Difference between Persistent and Non-Persistent HTTP](#difference-between-persistent-and-non-persistent-http)
     - [HTTP Response Time \& RTT](#http-response-time--rtt)
+    - [HTTP request methods-](#http-request-methods-)
+    - [Cookies](#cookies)
+    - [Web Caches (Proxy Servers)](#web-caches-proxy-servers)
 
 ## Introduction
 
@@ -1221,4 +1224,96 @@ In the Internet, this requires two pieces of information:
 Non-persistent HTTP response time =  2RTT + file transmission time
 
 ![rtt](/images/rtt.png)
+
+### HTTP request methods-
+**1. GET**
+
+- Definition: Requests data from the server without changing it.
+
+- Used to retrieve information (e.g., a webpage, API data).
+
+- Data sent in URL (query string), not in the body.
+
+- Safe and idempotent (repeated calls don’t change anything).
+
+- Example: Searching on Google.
+
+**2. POST**
+
+- Definition: Sends data to the server to create a new resource.
+
+- Used to submit forms, upload files.
+
+- Data is sent in request body.
+
+- Not idempotent (calling twice may create duplicates).
+
+- Example: Signing up for a new account.
+
+**3. PUT**
+
+- Definition: Updates/replaces an existing resource on the server.
+
+- Entire resource is replaced with the new data.
+
+- Idempotent (repeating the same request gives same result).
+
+- Example: Updating your profile details.
+
+**4. DELETE**
+
+- Definition: Removes a resource from the server.
+
+- Idempotent (deleting multiple times still results in “resource deleted”).
+
+- Example: Deleting a post or file.
+
+**5. HEAD**
+
+- Definition: Same as GET, but only asks for the headers (not the body).
+
+- Useful to check if a resource exists, or to get metadata (e.g., file size).
+
+- Example: A browser checking if a file has changed before downloading.
+
+### Cookies  
+
+**Definition:**  
+A **cookie** is a small piece of data that a web server stores on a user’s browser to maintain **state** (session info) across multiple HTTP requests, since HTTP is stateless.  
+
+**How it works (4 components):**  
+1. **Cookie in HTTP Response** → Server sends a cookie inside the HTTP response header (`Set-Cookie`).  
+2. **Cookie in HTTP Request** → Browser automatically sends the cookie back to the server in the next request.  
+3. **Cookie File on User’s Machine** → Browser stores cookies locally, often in a file.  
+4. **Server Database** → Server links the cookie ID to stored session/user info.  
+
+
+**Uses:**  
+- Session management (logins, shopping carts).  
+- Personalization (themes, user preferences).  
+- Tracking (ads, analytics).  
+- Authorization
+
+**First party cookies-** track user behavior on a given website.
+
+**Third party cookies-** track user behavior across multiple websites (third party cookies) without user ever choosing to visit tracker site.
+
+### Web Caches (Proxy Servers)  
+
+**Definition:**  
+A **web cache** (or proxy server) is a network entity that stores copies of web content closer to users, so future requests for the same content can be served faster without always going to the origin server.  
+
+
+**How it works:**  
+1. Browser sends HTTP request to cache instead of origin server.  
+2. If cache has a **fresh copy** → it serves directly (fast response).  
+3. If not → cache forwards request to origin server, stores the response, then serves it to user.  
+
+
+**Benefits:**  
+- **Reduces response time** → faster browsing for users.  
+- **Reduces traffic** → fewer requests to the origin server.  
+- **Scalability** → helps servers handle more users without overload.  
+- **Cost savings** → less bandwidth usage.  
+
 
