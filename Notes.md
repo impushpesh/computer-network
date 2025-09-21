@@ -153,6 +153,24 @@
       - [Simple Example:](#simple-example)
       - [Analogy:](#analogy-2)
     - [TCP steps-](#tcp-steps-)
+    - [TCP Premature Timeout](#tcp-premature-timeout)
+      - [Simple Analogy](#simple-analogy-1)
+    - [TCP Flow Control](#tcp-flow-control)
+      - [Simple Analogy](#simple-analogy-2)
+    - [TCP Handshakes](#tcp-handshakes)
+    - [3-Way Handshake (Standard TCP Connection Setup)](#3-way-handshake-standard-tcp-connection-setup)
+      - [Analogy](#analogy-3)
+    - [2-Way Handshake (Conceptual / Non-standard TCP)](#2-way-handshake-conceptual--non-standard-tcp)
+  - [Congestion control](#congestion-control)
+    - [Causes of Congestion](#causes-of-congestion)
+    - [Costs of Congestion](#costs-of-congestion)
+    - [Mechanisms of Congestion Control (TCP Example)](#mechanisms-of-congestion-control-tcp-example)
+    - [Simple Analogy](#simple-analogy-3)
+    - [TCP Congestion Control: AIMD](#tcp-congestion-control-aimd)
+    - [Key Points](#key-points-2)
+    - [How it works (Timeline Example)](#how-it-works-timeline-example)
+    - [Why AIMD?](#why-aimd)
+    - [Simple Analogy](#simple-analogy-4)
 
 ## Introduction
 
@@ -2219,4 +2237,216 @@ Think of **sequence numbers like page numbers in a book**:
 - if ACK acknowledges previously unACKed segments
   - update what is known to be ACKed
   - start timer if there are  still unACKed segments
+
+### TCP Premature Timeout
+
+**Definition:**  
+A **premature timeout** occurs when TCP’s retransmission timer expires **before the actual segment is lost**, causing the sender to retransmit unnecessarily.  
+
+**Key Points**
+
+**Cause:**  
+- The estimated **RTT (Round-Trip Time)** is shorter than the actual RTT due to **network delays, congestion, or jitter**.  
+- TCP thinks the packet is lost when it is actually still in transit.  
+
+**Effect:**  
+- Unnecessary retransmission of segments.  
+- Can lead to **duplicate packets** at the receiver.  
+- Causes **spurious congestion control**, slowing down the transmission rate.  
+
+**How TCP Handles It:**  
+- **Adaptive RTT Estimation:** TCP continuously updates **EstimatedRTT** and **TimeoutInterval** using **smoothed RTT (SRTT)** and deviation.  
+- **Duplicate ACKs:** If the retransmission was unnecessary, the receiver’s ACKs prevent further retransmissions.  
+
+#### Simple Analogy
+Imagine sending a letter to a friend and expecting it in 3 days:  
+- You think it’s lost and send another copy on day 3.  
+- In reality, the first letter was just delayed and arrives on day 4.  
+- That extra letter = **premature retransmission**.  
+
+**In short:**  
+- **TCP premature timeout = timer expires too early** → unnecessary retransmission → may reduce throughput.  
+- Controlled by **smoothed RTT & adaptive timeout** to reduce false retransmissions.  
+
+### TCP Flow Control
+
+**Definition:**  
+**Flow control** is a mechanism in TCP to ensure that the sender does not overwhelm the receiver.  
+It regulates the rate at which the sender transmits data so that the **receiver’s socket buffer** does not overflow.  
+
+**Scenario:**  
+- Network layer delivers data faster than the **application layer** can read from the socket buffer.  
+- Receiver’s buffer starts filling up.  
+
+**What happens next:**  
+
+**Receiver Advertises a Window Size:**  
+- TCP header has a **receiver window (rwnd)** field indicating available buffer space.  
+
+**Buffer Nearly Full → rwnd Shrinks:**  
+- Receiver tells sender how much space is left.  
+- If buffer is full → **rwnd = 0**.  
+
+**Sender Stops Sending:**  
+- Sender stops transmitting new data until it receives a **window update** from the receiver.  
+
+**Resume Transmission:**  
+- Once application reads data from buffer → buffer frees space → receiver advertises **new window** → sender resumes sending.  
+
+#### Simple Analogy
+Think of a **conveyor belt** delivering packages (network layer) to a **warehouse** (socket buffer):  
+- If the workers (application layer) are slow in taking packages off the belt,  
+  the belt will eventually **stop accepting more packages** until workers catch up.  
+
+**In short:**  
+- If network delivers data faster than the app reads it → TCP **slows down the sender using flow control** → avoids buffer overflow → ensures reliable data delivery.  
+
+### TCP Handshakes
+
+**Definition:**  
+A **handshake** is a process used to establish a **TCP connection** between a sender and a receiver before actual data transfer.  
+TCP uses a **3-way handshake** for reliable connections.  
+Sometimes, a **2-way handshake** is mentioned conceptually, but TCP standard is **3-way**.  
+
+---
+
+### 3-Way Handshake (Standard TCP Connection Setup)
+
+**Key Points:**
+
+**SYN (Synchronize):**  
+- **Client → Server**  
+- Client sends a segment with **SYN = 1** and **initial sequence number (ISN)**.  
+- Purpose: request connection and start sequence numbering.  
+
+**SYN-ACK (Synchronize + Acknowledge):**  
+- **Server → Client**  
+- Server sends **SYN = 1** (its own ISN) and **ACK = client’s ISN + 1**.  
+- Purpose: acknowledge client’s request and agree on its own sequence number.  
+
+**ACK (Acknowledge):**  
+- **Client → Server**  
+- Client sends **ACK = server’s ISN + 1**.  
+- Connection established → data transfer can begin.  
+
+#### Analogy
+- Client = person saying “Hi, can we talk?”  
+- Server = replies “Hi, I’m ready, here’s my handshake.”  
+- Client = “Great, let’s start talking!”  
+
+---
+
+### 2-Way Handshake (Conceptual / Non-standard TCP)
+
+- Some protocols or textbooks mention **2-way handshake** for basic connections:  
+  1. Client sends SYN (request)  
+  2. Server responds with SYN+ACK (connection established)  
+
+- Problem: Doesn’t handle lost or delayed SYNs reliably → why TCP uses 3-way handshake.  
+
+**In short:**  
+- **3-way handshake** = TCP standard → ensures both sides know each other’s ISN → reliable connection.  
+- **2-way handshake** = conceptual / unreliable → faster but unsafe in real TCP.  
+
+
+## Congestion control
+
+**Definition:**  
+Congestion control refers to mechanisms that **prevent too much data** from being injected into the network, which can overwhelm routers and links, causing **packet loss, long delays, and degraded performance**.  
+
+---
+
+### Causes of Congestion
+- Too many sources sending data simultaneously → network capacity exceeded.  
+- Routers have limited buffer space → queues overflow.  
+- Sudden bursts of traffic → temporary overloads.  
+- Slow links compared to fast senders → bottlenecks occur.  
+
+---
+
+### Costs of Congestion
+
+**Packet Loss:**  
+- Buffers overflow → packets are dropped.  
+- Retransmissions add extra traffic → worsening congestion.  
+
+**Increased Delay:**  
+- Packets wait longer in queues → round-trip time increases.  
+
+**Lower Throughput / Wasted Bandwidth:**  
+- Some packets lost → bandwidth used for retransmissions is wasted.  
+
+**Unfairness:**  
+- Some flows may dominate the network, others starve.  
+
+---
+
+### Mechanisms of Congestion Control (TCP Example)
+- **Window-based control:** Adjust sender’s window size according to network feedback.  
+- **Slow Start:** Begin sending slowly, increase window gradually.  
+- **Congestion Avoidance:** Detect congestion early (packet loss or delay) and reduce sending rate.  
+- **Fast Retransmit / Fast Recovery:** Quickly retransmit lost packets without waiting for timeout.  
+
+---
+
+### Simple Analogy
+Think of a **highway with many cars (packets)**:  
+- Congestion occurs when too many cars enter too fast → traffic jam, accidents, delays.  
+- **Congestion control** = traffic lights + speed limits → regulate flow, avoid jams, ensure fair travel.  
+
+**In short:**  
+- Congestion control = techniques to **avoid network overload**.  
+- **Causes:** too many senders, limited buffers, sudden bursts, bottlenecks.  
+- **Costs:** packet loss, delay, wasted bandwidth, unfairness.  
+- Implemented via TCP mechanisms like **slow start, congestion avoidance, and window adjustment**.  
+
+### TCP Congestion Control: AIMD
+
+**Definition:**  
+AIMD stands for **Additive Increase, Multiplicative Decrease**, a strategy TCP uses to adjust its **congestion window (cwnd)** to efficiently use network bandwidth while avoiding congestion.  
+
+---
+
+### Key Points
+
+**Additive Increase (AI):**  
+- TCP slowly increases the **congestion window** to probe for available bandwidth.  
+- Usually increases **1 MSS (Maximum Segment Size) per RTT**.  
+- Purpose: gradually find the network’s capacity without causing congestion.  
+
+**Multiplicative Decrease (MD):**  
+- When congestion is detected (packet loss or timeout), TCP reduces **cwnd** drastically.  
+- Usually halves the **cwnd**.  
+- Purpose: quickly relieve congestion in the network.  
+
+---
+
+### How it works (Timeline Example)
+- Initial cwnd = 1 MSS.  
+- No packet loss → cwnd increases linearly (1, 2, 3, …) → **Additive Increase**.  
+- Packet loss detected → cwnd reduces by half → **Multiplicative Decrease**.  
+- Repeat → cwnd grows again until next congestion.  
+
+**Graphically:**  
+- cwnd vs time = **sawtooth pattern**: slow linear growth + sharp drop on congestion.  
+
+---
+
+### Why AIMD?
+- Ensures **fairness** among multiple TCP flows.  
+- Efficiently uses network bandwidth without causing persistent congestion.  
+- Balances **throughput vs stability**.  
+
+---
+
+### Simple Analogy
+Imagine driving a car on a narrow road:  
+- **Additive Increase** = slowly accelerate when road is clear.  
+- **Multiplicative Decrease** = brake sharply when traffic jam appears.  
+- Repeat → smooth flow without crashes.  
+
+**In short:**  
+- TCP congestion control uses **AIMD** →  
+  - Increase slowly (**additive**) to utilize bandwidth.  
+  - Decrease sharply (**multiplicative**) on congestion → stable and fair network use.  
 
