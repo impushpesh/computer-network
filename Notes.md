@@ -97,7 +97,62 @@
       - [**IMAP (Internet Message Access Protocol)**](#imap-internet-message-access-protocol)
       - [Webmail (HTTP/HTTPS based)](#webmail-httphttps-based)
   - [DNS- Domain Name System](#dns--domain-name-system)
-    - [DNS: a distributed, hierarchical database](#dns-a-distributed-hierarchical-database)
+    - [DNS hierarchy](#dns-hierarchy)
+      - [Types-](#types-)
+    - [DNS name resoltuion](#dns-name-resoltuion)
+      - [Iterated query](#iterated-query)
+      - [Recursive query](#recursive-query)
+  - [P2P (Peer-to-Peer) Architecture](#p2p-peer-to-peer-architecture)
+    - [Types of P2P Networks:](#types-of-p2p-networks)
+    - [How it works (simple analogy):](#how-it-works-simple-analogy-1)
+    - [Advantages:](#advantages)
+    - [Disadvantages:](#disadvantages)
+    - [P2P File Distribution in BitTorrent](#p2p-file-distribution-in-bittorrent)
+      - [Definition:](#definition)
+      - [How it works (simple analogy):](#how-it-works-simple-analogy-2)
+      - [Roles in BitTorrent:](#roles-in-bittorrent)
+      - [Advantages:](#advantages-1)
+    - [BitTorrent – Tit-for-Tat](#bittorrent--tit-for-tat)
+      - [Key Points:](#key-points-1)
+  - [Video Streaming and Content Delivery Networks (CDN)](#video-streaming-and-content-delivery-networks-cdn)
+    - [Streaming Stored Video (VOD – Video on Demand)](#streaming-stored-video-vod--video-on-demand)
+      - [Stored Video Streaming:](#stored-video-streaming)
+      - [Challenges in Stored Video Streaming:](#challenges-in-stored-video-streaming)
+      - [Client-Side Buffering and Playout Delay:](#client-side-buffering-and-playout-delay)
+    - [Role of CDN in Video Streaming:](#role-of-cdn-in-video-streaming)
+    - [In short:](#in-short-1)
+    - [Streaming Multimedia: DASH (Dynamic Adaptive Streaming over HTTP)](#streaming-multimedia-dash-dynamic-adaptive-streaming-over-http)
+      - [Benefits:](#benefits)
+      - [In short:](#in-short-2)
+  - [Socket](#socket)
+      - [Simple Analogy:](#simple-analogy)
+- [Transport Layer (Part- 3)](#transport-layer-part--3)
+  - [Multiplexing \& Demultiplexing](#multiplexing--demultiplexing)
+  - [Connectionless vs. Connection-oriented:](#connectionless-vs-connection-oriented)
+    - [Connection-Oriented vs. Connectionless Demultiplexing](#connection-oriented-vs-connectionless-demultiplexing)
+  - [UDP- User Datagram Protocol](#udp--user-datagram-protocol)
+    - [UDP: Glance at transport layer](#udp-glance-at-transport-layer)
+      - [UDP- Sender action](#udp--sender-action)
+      - [UDP- Reciever action](#udp--reciever-action)
+  - [Principles of Reliable Data Transfer (RDT)](#principles-of-reliable-data-transfer-rdt)
+    - [Finite State Machines (FSMs)](#finite-state-machines-fsms)
+    - [RDT 1.0- **Reliable transfer over a reliable channel**](#rdt-10--reliable-transfer-over-a-reliable-channel)
+    - [RDT 2.0- **Channel with bit errors**](#rdt-20--channel-with-bit-errors)
+      - [Recovery from errors](#recovery-from-errors)
+      - [What if ack or nak are corrupted](#what-if-ack-or-nak-are-corrupted)
+    - [RDT 3.0- **channels with errors and loss**](#rdt-30--channels-with-errors-and-loss)
+    - [Go-Back-N (GBN) Sender](#go-back-n-gbn-sender)
+      - [Analogy:](#analogy)
+      - [FSM (Sender Simplified):](#fsm-sender-simplified)
+    - [Selective Repeat (SR) ARQ](#selective-repeat-sr-arq)
+      - [Example](#example-1)
+      - [Comparison with Go-Back-N](#comparison-with-go-back-n)
+      - [Analogy](#analogy-1)
+  - [TCP - Transission Control Protocol](#tcp---transission-control-protocol)
+    - [Sequence Number in TCP](#sequence-number-in-tcp)
+      - [Simple Example:](#simple-example)
+      - [Analogy:](#analogy-2)
+    - [TCP steps-](#tcp-steps-)
 
 ## Introduction
 
@@ -1525,4 +1580,643 @@ Mail access protocols are used by email clients to retrieve messages from a mail
 
 DNS = Internet’s phonebook, translates domain names to IP addresses, uses hierarchical servers, works over UDP/TCP, caches responses for efficiency.
 
-### DNS: a distributed, hierarchical database
+### DNS hierarchy
+#### Types-
+- Recursive Resolver: Queries other servers on your behalf.
+- Root Server: Top of the hierarchy, points to TLD servers.
+- TLD (Top level Domain) Server: Handles domains like .com, .org, .net.
+- Authoritative Server: Provides the final IP for a domain.
+
+![dns](/images/dns.png)
+
+Note: ICANN (Internet Corporation for Assigned Names and Numbers) manages root DNS domain
+
+### DNS name resoltuion
+#### Iterated query
+- Host contacts the server and contacted server either fullfills the request or gives the address of server to contact.
+- It's like "I don’t know this name, but ask this server"
+
+#### Recursive query
+- Here the host asks the server and now the job remains on that server to find the address which then further asks another server and transfers the load. Heavy load at upper hierarchy.
+
+## P2P (Peer-to-Peer) Architecture
+
+**P2P architecture** is a networking model where each computer (peer) can act as both a client and a server, sharing resources like files, processing power, or bandwidth directly with other peers without a central server.
+
+**Key Points:**
+
+- **Decentralized:** No single server controls the network.
+- Each peer can request and provide resources.
+- Commonly used for file sharing, streaming, distributed computing, and blockchain networks.
+- Reduces server bottlenecks because load is distributed.
+- **Examples:** BitTorrent, Skype (original version), blockchain nodes.
+
+### Types of P2P Networks:
+
+**Pure P2P:**
+
+- No central server at all.
+- All peers are equal, share resources directly.
+- **Example:** Early Gnutella network.
+
+**Hybrid P2P:**
+
+- Uses a central server to index resources or help peers find each other, but data is transferred directly between peers.
+- **Example:** BitTorrent trackers, modern Skype.
+
+### How it works (simple analogy):
+
+Imagine a neighborhood of friends sharing books:
+
+1. Everyone has some books at home.
+2. You want a book → instead of going to a library, you ask your friends directly.
+3. Each friend can lend books or borrow books from you.
+4. No single library controls the flow; everyone contributes.
+
+### Advantages:
+
+- **Scalable →** Adding more peers adds more resources.
+- **Fault-tolerant →** If one peer goes offline, others can still share data.
+- **Efficient →** Reduces load on central servers.
+
+### Disadvantages:
+
+- Harder to secure → No central control.
+- Resource availability depends on peers being online.
+- Can be slower if peers have low bandwidth.
+
+**In short:**
+**P2P =** decentralized network where peers act as clients and servers, share resources directly, scalable and fault-tolerant, used in file sharing, streaming, and blockchain.
+
+### P2P File Distribution in BitTorrent
+
+#### Definition:
+**BitTorrent** is a peer-to-peer (P2P) protocol for distributing large files efficiently. Instead of downloading a file from a single server, users (peers) download and upload pieces of the file from/to multiple peers simultaneously.
+
+**Key Points:**
+- The file is split into many small pieces (chunks).
+- Peers download missing pieces from multiple sources at once, increasing speed.
+- Each peer uploads pieces it already has to others — everyone contributes.
+- Uses a tracker or DHT (Distributed Hash Table) to locate peers sharing the file.
+- Ensures fairness using a “tit-for-tat” strategy — upload to peers who upload to you.
+- Reduces server load, because the original seeder only needs to provide one copy.
+
+#### How it works (simple analogy):
+
+Imagine assembling a jigsaw puzzle with friends:
+
+1. Each friend has some pieces of the puzzle.
+2. You collect missing pieces from multiple friends at the same time.
+3. As soon as you get pieces, you share them with others who need them.
+4. The puzzle is completed faster because everyone contributes simultaneously.
+
+#### Roles in BitTorrent:
+
+- **Seeder:** Peer who has the complete file and shares pieces.
+- **Leecher:** Peer who is downloading the file but may also upload pieces it already has.
+- **Tracker:** Optional server that keeps a list of peers for coordination. Tracks peers participating in torrent.
+- **Torrent:** Group of peers exchanging chunks of file. 
+
+#### Advantages:
+
+- Faster downloads as more peers join.
+- Reduces server bandwidth cost.
+- Highly scalable and efficient.
+
+**In short:**
+
+**BitTorrent =** P2P file-sharing protocol, splits files into chunks, peers while downloading, upload chunks to other peers simultaneously, uses tracker or DHT, faster and scalable than central server downloads.
+
+### BitTorrent – Tit-for-Tat
+
+Definition:
+
+**Tit-for-tat** is BitTorrent’s peer selection strategy that encourages fairness. Peers prefer to upload data to those who are also uploading to them, creating a mutual exchange of file pieces.
+
+#### Key Points:
+
+- Encourages cooperation among peers.
+- Prevents freeloaders (peers who only download but don’t upload).
+- Each peer maintains a list of neighbors and ranks them based on upload speed.
+- **Optimistic unchoking:** Occasionally allows uploading to a random peer to discover new high-speed partners.
+- Works dynamically → peers constantly update who they upload to, based on who reciprocates.
+
+**Benefits:**
+
+- Promotes fairness and cooperation.
+- Improves overall download speed.
+- Discourages selfish peers from slowing the network.
+
+**In short:**
+
+**Tit-for-tat =** BitTorrent’s strategy where peers upload to those who upload to them, ensures fairness, prevents freeloading, and improves network efficiency.
+
+## Video Streaming and Content Delivery Networks (CDN)
+
+**Definition**:
+
+**Video streaming** is the process of delivering video content over the Internet so users can watch it without downloading the entire file first.  
+**CDNs (Content Delivery Networks)** are distributed networks of servers that deliver content to users from the closest or fastest server, reducing delay and congestion.
+
+
+### Streaming Stored Video (VOD – Video on Demand)
+
+#### Stored Video Streaming:
+
+- The video is pre-recorded and stored on a server.
+- Clients request the video and receive a continuous stream of data.
+- **Examples:** YouTube, Netflix.
+
+#### Challenges in Stored Video Streaming:
+
+- **Network congestion:** Too many users can slow down delivery.
+- **Variable bandwidth:** Users have different connection speeds.
+- **Latency:** Delay between request and video playback.
+- **Packet loss:** Can cause glitches or buffering.
+
+#### Client-Side Buffering and Playout Delay:
+
+- **Buffering:** Client stores a few seconds of video in advance to handle network variations.
+- **Playout delay:** Delay introduced intentionally so that the buffer doesn’t empty, ensuring smooth playback.
+- **Trade-off:** Larger buffer → smoother playback but longer startup delay.
+
+### Role of CDN in Video Streaming:
+
+- CDN servers are distributed globally.
+- Serve video from a server closest to the user, reducing latency and congestion.
+- Support high scalability by balancing load across multiple servers.
+- **Example:** Watching Netflix in India may pull content from a server in Mumbai instead of the US.
+
+
+
+### In short:
+
+- **Video streaming:** Watch video without full download.  
+- **Stored video (VOD):** Pre-recorded, streamed continuously.  
+- **Challenges:** Congestion, bandwidth, latency, packet loss.  
+- **Buffering:** Client stores data ahead; playout delay ensures smooth playback.  
+- **CDN:** Distributed servers, reduce latency, handle high load, deliver faster.
+
+### Streaming Multimedia: DASH (Dynamic Adaptive Streaming over HTTP)
+
+**Definition**:
+**DASH** is a video streaming technique that allows clients to adaptively adjust video quality based on current network conditions, ensuring smooth playback over HTTP.
+
+**Key Points:**
+- Works over standard HTTP, so no special streaming servers needed.
+- Video is divided into small segments (chunks), each available in multiple bitrates.
+- The client dynamically selects which segment bitrate to download depending on bandwidth.
+- Adaptive streaming prevents buffering by lowering quality when the network is slow and increasing quality when bandwidth improves.
+- Used by platforms like YouTube, Netflix, and Hulu.
+
+
+#### Benefits:
+
+- Smooth playback even under fluctuating network conditions.
+- Efficient use of network resources.
+- Works with existing HTTP/CDN infrastructure.
+- Compatible with mobile devices and adaptive networks.
+
+#### In short:
+**DASH =** adaptive video streaming over HTTP, divides video into segments, client selects quality based on bandwidth, reduces buffering, widely used for online video services.
+
+## Socket
+
+**Definition**:
+
+A **socket** is a communication endpoint that acts as a “door” between an application process and the end-to-end transport protocol (TCP or UDP). It allows programs to send and receive data over a network.
+
+**Key Points:**
+
+- Works at the transport layer interface for applications.
+- Two main types of sockets:
+
+**TCP Socket (Stream Socket):**
+
+- Reliable, connection-oriented.
+- Guarantees delivery, order, and error checking.
+- **Example:** Web browsing, email (SMTP/IMAP), file transfer.
+
+**UDP Socket (Datagram Socket):**
+
+- Unreliable, connectionless.
+- No guarantee of delivery or order, but faster and lightweight.
+- **Example:** Video streaming, online gaming, VoIP.
+
+- Socket programming allows applications to communicate over the network using IP addresses and port numbers.
+- Every socket is identified by **IP address + port number**.
+
+#### Simple Analogy:
+
+Think of a socket as a door:
+
+- **TCP socket =** a secure, guaranteed delivery courier — checks every packet.
+- **UDP socket =** a fast messenger — delivers quickly but may lose some messages.
+
+---
+
+# Transport Layer (Part- 3)
+
+**Recap**: 
+- It divides the data into segments.
+  - sender: breaks application messages into segments, passes to  network layer
+  - receiver: reassembles segments into messages, passes to application layer
+  
+- It has two protocols-
+  - TCP
+    - It gives all info.
+    - If we want to send data with proper acknowledgement that reciever has recieved the data.
+  - UDP
+    - We use this protocol when we want to send data faster. We won't be able to know whether the data has been sent or not.
+
+## Multiplexing & Demultiplexing
+
+**Definition**:
+
+**Multiplexing and demultiplexing** are transport-layer services that allow multiple applications to share the network.  
+- **Multiplexing:** gathers outgoing data from different apps into segments.  
+- **Demultiplexing:** delivers incoming segments to the correct application process.  
+
+
+**Key Points:**
+
+**Multiplexing (Sender side):**
+- Collects data from multiple application processes (e.g., browser, email, music app).
+- Adds transport layer headers (with **source & destination port numbers**).
+- Sends the segment down to the network layer for delivery.
+
+**Demultiplexing (Receiver side):**
+- Transport layer receives segments from the network layer (like a bag of letters).
+- Transport layer looks at the destination port number (the “address”) (and sometimes full 4-tuple: source IP, source port, destination IP, destination port)
+- Delivers data to the correct application (browser, mail client, etc.)..
+
+
+## Connectionless vs. Connection-oriented:
+
+- **UDP demux:**  
+  Uses **only destination port number** (simpler, less reliable).  
+  Example: DNS request on port 53.
+
+- **TCP demux:**  
+  Uses **(source IP, source port, destination IP, destination port)**.  
+  This allows multiple simultaneous connections to the same port.  
+  Example: Two browser tabs both connecting to a web server on port 80.
+
+
+**Simple Analogy:**
+Think of a **post office**:  
+- **Multiplexing:** many people drop off letters at one post office → each letter gets an address label.  
+- **Demultiplexing:** at the destination, the post office sorts le
+
+### Connection-Oriented vs. Connectionless Demultiplexing
+
+**Definition**:
+
+**Demultiplexing** is how the transport layer delivers incoming segments to the correct application.  
+The process differs depending on whether the protocol is **connection-oriented (TCP)** or **connectionless (UDP)**.  
+
+
+**Key Points:**
+
+**Connectionless Demultiplexing (UDP):**
+- Each UDP segment has: **destination port # + source port #**.  
+- At receiver: transport layer uses **only the destination port number** to deliver the data.  
+- No concept of a “connection” — each segment is treated **independently**.  
+- Two different senders can send data to the **same destination port**, and the app will just get them all.  
+- **Less overhead, faster**, but no guarantee of **reliability or order**.  
+
+**Connection-Oriented Demultiplexing (TCP):**
+- Each TCP segment has: **source IP, source port, destination IP, destination port**.  
+- At receiver: transport layer uses this **4-tuple** to identify the correct socket.  
+- This allows **multiple connections to the same port**  
+  (e.g., 2 browser tabs on port 80 → server distinguishes them using source IP/port).  
+- Provides **reliable, ordered delivery** with **flow and congestion control**.  
+
+---
+
+**Simple Analogy:**
+
+- **UDP (connectionless):** Like a **radio station** → anyone can tune in if they know the **frequency (port number)**. Doesn’t matter who sent it.  
+- **TCP (connection-oriented):** Like a **phone call** → identified by both caller and receiver numbers (**IP + port**). Multiple people can call the same number, but each call is tracked separately.  
+
+---
+
+**In short:**
+- **UDP demux:** Based on **destination port only**, simple but unreliable.  
+- **TCP demux:** Based on **(src IP, src port, dest IP, dest port)**, more complex but supports multiple reliable connections.  
+
+
+## UDP- User Datagram Protocol
+- Connectionless
+  - No handshaking between sender and reciever.
+  - each UDP segment is handeled independently.
+- Small header size
+- No congestion control
+
+![udp](/images/udp.png)
+
+### UDP: Glance at transport layer
+
+#### UDP- Sender action
+- Is passed an application layer message
+- Determines UDP segment header file
+- Creates UDP segment
+- Passes segment to IP
+
+#### UDP- Reciever action
+- Recieves segment from IP
+- checks UDP checksum header value
+- extracts application-layer message
+- demultiplexes message up to application via socket
+
+## Principles of Reliable Data Transfer (RDT)
+
+**Definition**:
+
+**Reliable Data Transfer (RDT)** refers to protocols that guarantee **correct, complete, and in-order delivery** of data across a potentially unreliable network.  
+
+---
+
+**Key Points:**
+
+**Main Challenges:**
+- Packets may be **lost**.  
+- Packets may be **corrupted** (bit errors).  
+- Packets may be **duplicated**.  
+- Packets may arrive **out of order**.  
+
+---
+
+**Techniques to Ensure Reliability:**
+
+- **Error Detection:**
+  - Use **checksums** to detect corrupted data.  
+  - Receiver discards or requests **retransmission** if error is detected.  
+
+- **Acknowledgments (ACKs):**
+  - Receiver confirms successful receipt of data.  
+
+- **Negative Acknowledgments (NAKs):**
+  - Receiver explicitly signals that a packet was **not received** or was **corrupted**.  
+
+- **Retransmissions:**
+  - Sender resends packets when **NAK** is received or **ACK** is missing after a **timeout**.  
+
+- **Sequence Numbers:**
+  - Every packet is labeled to **detect duplicates** and ensure correct ordering.  
+
+- **Timers:**
+  - If sender doesn’t receive **ACK within a certain time**, it retransmits (to handle lost packets).  
+
+### Finite State Machines (FSMs)
+
+**Definition:**
+
+A **Finite State Machine (FSM)** is a mathematical model of a system that can be in one of a **finite number of states** at any given time.  
+The system changes states based on **inputs/events** and performs certain **actions** during transitions.  
+
+---
+
+**Key Points:**
+
+- **States:**  
+  Possible conditions the system can be in (e.g., *waiting for data*, *waiting for ACK*).  
+
+- **Events (Inputs):**  
+  External triggers that cause a state change (e.g., *packet received*, *timeout expired*).  
+
+- **Transitions:**  
+  Rules for moving from one state to another, often with an associated action  
+  (e.g., retransmit packet, send ACK).  
+
+- **Actions:**  
+  Operations performed during transitions (e.g., deliver data to app, resend packet).  
+
+
+**Usage in Networking:**
+
+- **Reliable Data Transfer protocols** (e.g., RDT 2.2, RDT 3.0) are specified using FSMs.  
+- Sender and receiver each have their own FSM.  
+- Helps visualize how the system behaves under **loss, corruption, or success**.  
+
+
+**Simple Analogy:**
+
+Think of FSM as a **traffic light system**:
+- **States** = Red, Yellow, Green.  
+- **Events** = Timer expires, pedestrian button pressed.  
+- **Transitions** = Green → Yellow → Red.  
+- **Actions** = “Stop cars,” “Allow crossing.”  
+
+Only a few possible states, and transitions happen based on clear rules.  
+
+
+**Networking Example (RDT Sender FSM):**
+
+- **State:** “Wait for call from above.”  
+  - **Event:** Application gives data → **Action:** Send packet, move to “Wait for ACK.”  
+
+- **State:** “Wait for ACK.”  
+  - **Event:** ACK received → **Action:** Deliver success, return to “Wait for call.”  
+  - **Event:** Timeout → **Action:** Retransmit packet, stay in “Wait for ACK.”  
+
+
+**In short:**
+- **FSM = system model** with limited states, transitions based on inputs, and actions tied to transitions.  
+- In networking → makes sender/receiver behavior clear in reliable data transfer.  
+
+### RDT 1.0- **Reliable transfer over a reliable channel**
+
+- Underlying channel is perfectly reliable
+- No bit errors
+- No packet loss
+- Separate FSM for sender and reciever
+  - Sender sebds data while reciever recieves data from underlying channel.
+
+### RDT 2.0- **Channel with bit errors**
+- Underlying channel may flip bits in packets.
+  - checksum (e.g., Internet checksum) to detect bit errors
+
+#### Recovery from errors
+- **acknowledgements (ACKs):** receiver explicitly tells sender that pkt received OK
+- **negative acknowledgements (NAKs):** receiver explicitly tells sender that pkt had errors
+  - sender retransmits pkt on receipt of NAK
+
+Sender sends one packet and then waits for reciever response.
+
+#### What if ack or nak are corrupted
+- Sender doesnt know what happened at reciever end.
+- Sending packet again may result in duplication at reciever.
+
+So to handle duplicates-
+- sender retransmits current pkt if ACK/NAK corrupted
+- sender adds sequence number to each pkt
+- receiver discards (doesn’t deliver up) duplicate pkt
+
+### RDT 3.0- **channels with errors and loss**
+
+Underlying channel can also lose packets.
+
+- sender waits “reasonable” amount of time for ACK 
+- retransmits if no ACK received in this time
+- if pkt (or ACK) just delayed (not lost):
+  - retransmission will be  duplicate, but seq #s already handles this!
+  - receiver must specify seq # of packet being ACKed
+- use countdown timer to interrupt after “reasonable” amount of time
+
+![rdta](/images/rdta.gif)
+![rdtb](/images/rdtb.gif)
+![rdtc](/images/rdtc.gif)
+![rdtd](/images/rdtd.gif)
+![rdt](/images/rdt.png)
+![rdt2](/images/rdt2.png)
+
+### Go-Back-N (GBN) Sender
+
+**Definition:**
+
+**Go-Back-N (GBN)** is a **sliding window protocol** for reliable data transfer.  
+The sender can transmit multiple packets (up to **N**) without waiting for an ACK,  
+but must **go back and retransmit** from a lost packet if any error/loss occurs.  
+
+**Key Points (Sender Side):**
+
+- **Sliding Window:**  
+  - Window size = **N**.  
+  - Sender can send packets with sequence numbers in the window.  
+  - Must wait if the window is full.  
+
+- **Sequence Numbers:**  
+  - Each packet has a unique sequence number (modulo some max).  
+  - Helps receiver maintain correct order.  
+
+- **ACK Handling:**  
+  - Receiver sends **cumulative ACKs** (ACK n = “I got everything up to n−1”).  
+  - If packet *k* is lost → sender won’t get ACKs for *k+1, k+2…*  
+
+- **Timeout:**  
+  - Sender starts a timer when the **first unACKed packet** is sent.  
+  - If timeout expires before ACK → retransmit **all unACKed packets** (not just the lost one).  
+
+#### Analogy:
+Like sending homework pages through a class monitor:  
+- You can give up to **5 pages at once** (window size = 5).  
+- If the **3rd page is lost**, teacher only acknowledges pages 1–2.  
+- You must resend **page 3, 4, and 5** again → go back to the lost one.  
+
+#### FSM (Sender Simplified):
+- **State:** Ready to send if window not full.  
+  - **Event:** App data → create packet with seq #, send, start timer if first in window.  
+
+- **State:** Waiting for ACK.  
+  - **Event:** Valid ACK received → slide window forward.  
+  - **Event:** Timeout → retransmit all unACKed packets.  
+
+**In short:**  
+- **GBN Sender = sliding window protocol** where sender can send **N packets**,  
+  but on loss must retransmit **all unACKed packets** starting from the lost one.  
+
+![GBN](/images/GBN.gif)
+
+### Selective Repeat (SR) ARQ
+
+**Definition:**  
+Selective Repeat is a **sliding window protocol** for reliable data transfer.  
+Unlike Go-Back-N, the sender retransmits **only the lost/unacknowledged packet** instead of the whole window.
+
+**Key Points**
+
+**Sender Side:**  
+- Maintains a window of size **N**.  
+- Can send multiple packets without waiting for ACKs.  
+- If a packet times out → only that packet is retransmitted.  
+
+**Receiver Side:**  
+- Accepts out-of-order packets and **buffers** them.  
+- Sends an ACK for **every correctly received packet**.  
+- Once missing packets arrive, buffered packets are delivered in order to the application.  
+
+#### Example
+Window size = 4, sender sends packets **0, 1, 2, 3**.  
+
+- Receiver gets 0, 2, 3 (but **1** is lost).  
+- Receiver ACKs 0, 2, 3 and buffers 2, 3.  
+- Sender times out for packet 1 → retransmits **only packet 1**.  
+- Once 1 arrives, receiver delivers **0,1,2,3** in order.  
+
+#### Comparison with Go-Back-N
+
+| Feature               | Go-Back-N                     | Selective Repeat              |
+|------------------------|--------------------------------|--------------------------------|
+| ACKs                  | **Cumulative** (ACK n → all ≤ n received) | **Individual** for each packet |
+| Receiver              | **Discards** out-of-order packets | **Buffers** out-of-order packets |
+| Sender Retransmission | Retransmits **all unACKed** packets after loss | Retransmits **only lost** packet |
+| Efficiency            | **Lower** (wasteful retransmissions) | **Higher** (fewer retransmissions, more buffer use) |
+
+#### Analogy
+Think of mailing assignments:  
+
+- In **GBN**, if page 2 is lost, you resend pages 2,3,4 again.  
+- In **SR**, you resend **only page 2**, since the teacher already saved pages 3 and 4.  
+
+![SR](/images/S.gif)
+
+## TCP - Transission Control Protocol
+
+- Connection oriented
+  - Handshaking- initializes sender, receiver state before data exchange
+- Point to point
+  - One sender and one reciever
+- bi-directional data flow in same connection
+
+
+![tcp](/images/tcp.png)
+
+### Sequence Number in TCP
+
+**Definition:**
+
+The **Sequence Number (seq #)** in TCP is a number assigned to each **byte of data** in a TCP connection.  
+It tells the receiver the **order of bytes** and ensures **reliable, in-order delivery**.  
+
+**Key Points:**
+
+- Each byte of data has a unique number.  
+- The **seq # field** in a TCP segment header = number of the **first byte** in that segment’s data.  
+- Helps receiver reassemble data correctly, even if packets arrive out of order.  
+- Used for detecting **lost or duplicate segments**.  
+- Works with **ACK # (acknowledgment number)** → tells sender “I’ve received everything up to byte X.”  
+
+#### Simple Example:
+App wants to send: **“HELLO”** (5 bytes).  
+Initial Sequence Number (ISN) chosen = **1000**.  
+
+- **Segment 1:** “HEL” → Seq # = 1000 (covers bytes 1000–1002)  
+- **Segment 2:** “LO” → Seq # = 1003 (covers bytes 1003–1004)  
+
+Receiver uses sequence numbers to reorder correctly.  
+
+#### Analogy:
+Think of **sequence numbers like page numbers in a book**:  
+- Each page has a number.  
+- If pages get shuffled, you can still reorder them.  
+- The reader can say, *“I’ve read up to page 50”* (like ACK).  
+
+**In short:**  
+- **Seq # = position of the first byte in the segment** → ensures **ordered, reliable delivery**.  
+
+
+### TCP steps-
+**Event**- data received from application layer
+- Create segment with seq #
+- start timer if not already running 
+
+**Event**- Timeout
+- retransmit segment that caused timeout
+- Resart timer
+
+**Event**- ACK recieved
+- if ACK acknowledges previously unACKed segments
+  - update what is known to be ACKed
+  - start timer if there are  still unACKed segments
+
