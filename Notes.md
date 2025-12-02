@@ -171,6 +171,204 @@
     - [How it works (Timeline Example)](#how-it-works-timeline-example)
     - [Why AIMD?](#why-aimd)
     - [Simple Analogy](#simple-analogy-4)
+- [Network Layer (Part- 4)](#network-layer-part--4)
+    - [Key Points](#key-points-3)
+      - [Host Responsibilities (Sender \& Receiver):](#host-responsibilities-sender--receiver)
+    - [Network Layer Protocols (Present in Every Device)](#network-layer-protocols-present-in-every-device)
+    - [Router Responsibilities](#router-responsibilities)
+    - [Main Network Layer Functions](#main-network-layer-functions)
+      - [1. Forwarding](#1-forwarding)
+      - [2. Routing](#2-routing)
+    - [Simple Analogy](#simple-analogy-5)
+    - [Data Plane vs Control Plane](#data-plane-vs-control-plane)
+    - [Key Points](#key-points-4)
+      - [Data Plane (Forwarding Plane)](#data-plane-forwarding-plane)
+      - [Control Plane](#control-plane)
+    - [Simple Analogy](#simple-analogy-6)
+  - [Network service model](#network-service-model)
+  - [Switching fabric](#switching-fabric)
+    - [Types of  Switching Fabrics:](#types-of--switching-fabrics)
+  - [Input port queueing](#input-port-queueing)
+    - [Head-of-Line (HOL) Blocking](#head-of-line-hol-blocking)
+  - [Output port queueing](#output-port-queueing)
+    - [Buffer management](#buffer-management)
+    - [Packet Scheduling](#packet-scheduling)
+  - [The bigger picture of network layer- What ecactly happens](#the-bigger-picture-of-network-layer--what-ecactly-happens)
+  - [IP Addressing](#ip-addressing)
+    - [Subnet](#subnet)
+    - [CIDR Notation](#cidr-notation)
+      - [What does 10.0.0.0/8 mean?](#what-does-100008-mean)
+      - [1. What is the meaning of 10.0.0.0?](#1-what-is-the-meaning-of-10000)
+      - [2. What does /8 mean?](#2-what-does-8-mean)
+      - [How big is the network 10.0.0.0/8?](#how-big-is-the-network-100008)
+      - [Why do colleges or companies use 10.0.0.0/8?](#why-do-colleges-or-companies-use-100008)
+      - [Subnetting the /8 block](#subnetting-the-8-block)
+      - [Why these are /24 and not /8?](#why-these-are-24-and-not-8)
+      - [Summary](#summary)
+    - [**How does a host get an IP address within its network (host part)?**](#how-does-a-host-get-an-ip-address-within-its-network-host-part)
+    - [**How does a network get its IP address (network part)?**](#how-does-a-network-get-its-ip-address-network-part)
+    - [DHCP client server interaction](#dhcp-client-server-interaction)
+    - [Network Address Translation (NAT)](#network-address-translation-nat)
+  - [IPv6 and Tunneling](#ipv6-and-tunneling)
+    - [Why IPv6?](#why-ipv6)
+    - [What is IPv6?](#what-is-ipv6)
+    - [IPv4 and IPv6 Compatibility Issue](#ipv4-and-ipv6-compatibility-issue)
+    - [What is IPv6 Tunneling?](#what-is-ipv6-tunneling)
+    - [Why Tunneling?](#why-tunneling)
+    - [Types of Tunneling](#types-of-tunneling)
+    - [How Tunneling Works (Simple)](#how-tunneling-works-simple)
+  - [OpenFlow vs Flow Table Abstraction](#openflow-vs-flow-table-abstraction)
+    - [Flow Table Abstraction (Concept)](#flow-table-abstraction-concept)
+    - [What is OpenFlow?](#what-is-openflow)
+    - [Key Differences](#key-differences)
+    - [Simple Summary](#simple-summary)
+  - [Routing Protocols: Distance Vector vs Link State](#routing-protocols-distance-vector-vs-link-state)
+    - [1. Distance Vector Routing Protocols](#1-distance-vector-routing-protocols)
+      - [**Idea**](#idea)
+      - [**Algorithm**](#algorithm)
+      - [**How It Works**](#how-it-works)
+      - [**Examples**](#examples)
+      - [**Advantages**](#advantages-2)
+      - [**Disadvantages**](#disadvantages-1)
+    - [2. Link State Routing Protocols](#2-link-state-routing-protocols)
+      - [**Idea**](#idea-1)
+      - [**Algorithm**](#algorithm-1)
+      - [**How It Works**](#how-it-works-1)
+      - [**Examples**](#examples-1)
+      - [**Advantages**](#advantages-3)
+      - [**Disadvantages**](#disadvantages-2)
+    - [Difference Table](#difference-table)
+    - [Summary](#summary-1)
+  - [OSPF (Open Shortest Path First)](#ospf-open-shortest-path-first)
+    - [Key Features](#key-features)
+    - [How OSPF Works](#how-ospf-works)
+    - [Advantages](#advantages-4)
+    - [Disadvantages](#disadvantages-3)
+    - [Summary](#summary-2)
+- [Link Layer (Part- 5)](#link-layer-part--5)
+  - [Feature](#feature)
+    - [1. Framing](#1-framing)
+    - [2. MAC Addressing](#2-mac-addressing)
+    - [3. Error Detection](#3-error-detection)
+    - [4. Error Correction (Optional)](#4-error-correction-optional)
+    - [5. Flow Control (Optional)](#5-flow-control-optional)
+    - [6. Medium Access Control (MAC Protocols)](#6-medium-access-control-mac-protocols)
+    - [7. Hop-by-Hop Delivery](#7-hop-by-hop-delivery)
+  - [Internet Checksum and Cyclic Redundancy Check (CRC)](#internet-checksum-and-cyclic-redundancy-check-crc)
+    - [1. Internet Checksum](#1-internet-checksum)
+      - [**Purpose**](#purpose)
+      - [**How It Works**](#how-it-works-2)
+      - [**Features**](#features)
+      - [**Used In**](#used-in)
+    - [2. Cyclic Redundancy Check (CRC)](#2-cyclic-redundancy-check-crc)
+      - [**Purpose**](#purpose-1)
+      - [**How It Works**](#how-it-works-3)
+      - [**Features**](#features-1)
+      - [**Used In**](#used-in-1)
+    - [Internet Checksum vs CRC](#internet-checksum-vs-crc)
+  - [Multiple Access Protocols: Point-to-Point and Broadcast](#multiple-access-protocols-point-to-point-and-broadcast)
+    - [1. Point-to-Point Links](#1-point-to-point-links)
+      - [**Definition**](#definition-1)
+      - [**Examples**](#examples-2)
+      - [**Features**](#features-2)
+    - [2. Broadcast (Shared) Links](#2-broadcast-shared-links)
+      - [**Definition**](#definition-2)
+      - [**Examples**](#examples-3)
+    - [Types of Broadcast Multiple Access Protocols](#types-of-broadcast-multiple-access-protocols)
+      - [**A. Random Access Protocols**](#a-random-access-protocols)
+      - [**B. Controlled Access Protocols**](#b-controlled-access-protocols)
+      - [**C. Channelization Protocols or Channel partitioning**](#c-channelization-protocols-or-channel-partitioning)
+    - [Point-to-Point vs Broadcast (Comparison)](#point-to-point-vs-broadcast-comparison)
+    - [Summary](#summary-3)
+  - [Channel partitioning protocols](#channel-partitioning-protocols)
+    - [1. FDMA (Frequency Division Multiple Access)](#1-fdma-frequency-division-multiple-access)
+      - [**Definition**](#definition-3)
+      - [**How It Works**](#how-it-works-4)
+      - [**Examples**](#examples-4)
+      - [**Features**](#features-3)
+    - [2. TDMA (Time Division Multiple Access)](#2-tdma-time-division-multiple-access)
+      - [**Definition**](#definition-4)
+      - [**How It Works**](#how-it-works-5)
+      - [**Examples**](#examples-5)
+      - [**Features**](#features-4)
+    - [3. CDMA (Code Division Multiple Access)](#3-cdma-code-division-multiple-access)
+      - [**Definition**](#definition-5)
+      - [**How It Works**](#how-it-works-6)
+      - [**Examples**](#examples-6)
+      - [**Features**](#features-5)
+    - [FDMA vs TDMA vs CDMA (Comparison)](#fdma-vs-tdma-vs-cdma-comparison)
+    - [Summary](#summary-4)
+  - [Random Access Protocols](#random-access-protocols)
+    - [1. Pure ALOHA](#1-pure-aloha)
+      - [**Definition**](#definition-6)
+      - [**Collision Handling**](#collision-handling)
+      - [**Efficiency**](#efficiency)
+      - [**Features**](#features-6)
+    - [2. Slotted ALOHA](#2-slotted-aloha)
+      - [**Definition**](#definition-7)
+      - [**Collision Handling**](#collision-handling-1)
+      - [**Efficiency**](#efficiency-1)
+      - [**Features**](#features-7)
+    - [3. CSMA (Carrier Sense Multiple Access)](#3-csma-carrier-sense-multiple-access)
+      - [**Definition**](#definition-8)
+      - [**Features**](#features-8)
+      - [**Types**](#types)
+    - [4. CSMA/CD (Carrier Sense Multiple Access with Collision Detection)](#4-csmacd-carrier-sense-multiple-access-with-collision-detection)
+      - [**Definition**](#definition-9)
+      - [**Used In**](#used-in-2)
+      - [**Features**](#features-9)
+    - [5. CSMA/CA (Carrier Sense Multiple Access with Collision Avoidance)](#5-csmaca-carrier-sense-multiple-access-with-collision-avoidance)
+      - [**Definition**](#definition-10)
+      - [**Used In**](#used-in-3)
+      - [**Features**](#features-10)
+    - [Comparison of Random Access Protocols](#comparison-of-random-access-protocols)
+    - [Summary](#summary-5)
+  - [Controlled Access Protocols](#controlled-access-protocols)
+    - [1. Token Ring](#1-token-ring)
+      - [**Definition**](#definition-11)
+      - [**How It Works**](#how-it-works-7)
+      - [**Features**](#features-11)
+    - [2. Token Bus](#2-token-bus)
+      - [**Definition**](#definition-12)
+      - [**How It Works**](#how-it-works-8)
+      - [**Features**](#features-12)
+    - [3. Polling (Master–Slave)](#3-polling-masterslave)
+      - [**Definition**](#definition-13)
+      - [**How It Works**](#how-it-works-9)
+      - [**Features**](#features-13)
+    - [Comparison of Controlled Access Protocols](#comparison-of-controlled-access-protocols)
+    - [Summary](#summary-6)
+  - [Summary of MAC (Medium Access Control) Protocols](#summary-of-mac-medium-access-control-protocols)
+    - [1. Random Access Protocols](#1-random-access-protocols)
+      - [**Examples**](#examples-7)
+      - [**Key Idea**](#key-idea)
+      - [**Pros**](#pros)
+      - [**Cons**](#cons)
+    - [2. Channel Partitioning Protocols (Channelization)](#2-channel-partitioning-protocols-channelization)
+      - [**Examples**](#examples-8)
+      - [**Key Idea**](#key-idea-1)
+      - [**Pros**](#pros-1)
+      - [**Cons**](#cons-1)
+    - [3. Controlled Access Protocols (Taking Turns)](#3-controlled-access-protocols-taking-turns)
+      - [**Examples**](#examples-9)
+      - [**Key Idea**](#key-idea-2)
+      - [**Pros**](#pros-2)
+      - [**Cons**](#cons-2)
+    - [**One-Line Summary**](#one-line-summary)
+  - [DOCSIS (Data Over Cable Service Interface Specification)](#docsis-data-over-cable-service-interface-specification)
+    - [Key Points](#key-points-5)
+    - [DOCSIS Versions (Speeds)](#docsis-versions-speeds)
+    - [Summary](#summary-7)
+  - [Difference Between Switch and Router](#difference-between-switch-and-router)
+  - [VLAN (Virtual Local Area Network)](#vlan-virtual-local-area-network)
+    - [**Key Features**](#key-features-1)
+    - [**How VLAN Works**](#how-vlan-works)
+    - [**Summary**](#summary-8)
+  - [MPLS (Multiprotocol Label Switching)](#mpls-multiprotocol-label-switching)
+    - [**Key Features**](#key-features-2)
+    - [**How MPLS Works**](#how-mpls-works)
+    - [**Benefits**](#benefits-1)
+    - [**Summary**](#summary-9)
 
 ## Introduction
 
@@ -2450,3 +2648,1584 @@ Imagine driving a car on a narrow road:
   - Increase slowly (**additive**) to utilize bandwidth.  
   - Decrease sharply (**multiplicative**) on congestion → stable and fair network use.  
 
+# Network Layer (Part- 4)
+- Assigns and uses IP addresses (IPv4/IPv6)
+- Decides the best path for data to travel from source to destination.
+- Breaks large packets into smaller fragments when needed
+- Reassembles them at the destination.
+- The Network Layer is like Google Maps for data: It gives addresses, finds the best path, and ensures packets reach across networks.
+
+**Definition:**  
+The **Network Layer** is responsible for moving packets (datagrams) from the sending host to the receiving host across multiple routers.  
+It provides **host-to-host delivery**, deciding the packet’s path and forwarding it through the network.
+
+---
+
+### Key Points
+
+#### Host Responsibilities (Sender & Receiver):
+
+**Sender:**  
+- Takes transport-layer segments.  
+- Encapsulates them into **IP datagrams**.  
+- Passes datagrams down to the link layer (data link layer) for transmission.  
+
+**Receiver:**  
+- Receives datagrams from the link layer.  
+- Extracts the segment from the datagram.  
+- Delivers the segment to the appropriate **transport-layer protocol (TCP/UDP)**.  
+
+---
+
+### Network Layer Protocols (Present in Every Device)
+- Every host and router runs network-layer protocols like **IP, ICMP, routing protocols, ARP (indirectly)**.  
+- Handles **addressing, routing, fragmentation, and forwarding**.  
+
+---
+
+### Router Responsibilities
+- Routers operate **ONLY** in the network layer.  
+- They:  
+  - Examine IP header fields (destination address, TTL, checksum, etc.).  
+  - Decide the output port to forward the packet.  
+  - Move datagrams from **input interface → switching fabric → output interface**.  
+- Routers **do not** look at transport layer (TCP/UDP) or application data.  
+
+---
+
+### Main Network Layer Functions
+
+#### 1. Forwarding
+- Moving a datagram from an **input link → correct output link**.  
+- Happens per-router, very fast.  
+- Uses **forwarding tables**.  
+
+#### 2. Routing
+- Deciding the **entire path** a packet should take from source to destination.  
+- Uses algorithms like:  
+  - **Link-State** (e.g., OSPF)  
+  - **Distance-Vector** (e.g., RIP)  
+  - **Path-Vector** (e.g., BGP)  
+
+Routing = overall **“trip plan”**  
+Forwarding = each **“turn”** along the way  
+
+---
+
+### Simple Analogy
+Think of taking a road trip:  
+- **Routing** = planning the full route from City A to City B using Google Maps.  
+- **Forwarding** = at every intersection, choosing the correct road to stay on the planned route.  
+
+Routing = the **big picture**  
+Forwarding = **local decisions** at every router  
+
+---
+
+**In short:**  
+- Network layer = moves packets **host-to-host** across the network.  
+- **Sender:** encapsulates segment → datagram.  
+- **Receiver:** delivers segment to transport layer.  
+- **Routers:** examine headers, forward datagrams.  
+- **Forwarding:** local per-router movement.  
+- **Routing:** global path selection using routing algorithms.  
+
+### Data Plane vs Control Plane
+
+**Definition:**  
+In the network layer, the **data plane** and **control plane** are two distinct functions inside routers and switches.  
+- **Data Plane** → handles actual **packet forwarding**.  
+- **Control Plane** → handles **route computation** and decision-making.  
+
+---
+
+### Key Points
+
+#### Data Plane (Forwarding Plane)
+
+**What it does:**  
+- Moves packets from an **input port → correct output port**.  
+- Implements forwarding based on the **forwarding table**.  
+- Operates **locally** within each router.  
+- Must be **fast**, often hardware-accelerated (**ASICs**).  
+
+**Characteristics:**  
+- Per-packet operation.  
+- Uses forwarding table, **not** routing algorithms.  
+- Happens in **microseconds**.  
+
+**Examples:**  
+- Looking at destination IP and sending packet out **port 3**.  
+- Applying NAT, firewall rules, or queue scheduling.  
+
+
+#### Control Plane
+
+**What it does:**  
+- Computes the **paths** packets should take across the network.  
+- Builds and updates the **routing table** using routing algorithms.  
+- Installs forwarding rules into the **data plane**.  
+
+**Characteristics:**  
+- Runs **network-wide algorithms** (OSPF, RIP, BGP).  
+- Slower, CPU-driven → runs in **milliseconds to seconds**.  
+- Determines the **big picture** of packet travel.  
+
+**Two Types of Control Plane:**  
+- **Traditional routers:** control plane runs inside each router.  
+- **SDN (Software Defined Networking):** control plane is **centralized** in a controller (ONOS, OpenDaylight).  
+
+---
+
+### Simple Analogy
+
+Think of a **city transportation system**:
+
+- **Control Plane = City’s planning department**  
+  - Decides routes, one-way roads, traffic rules.  
+  - Determines how cars should move.  
+
+- **Data Plane = Actual traffic on the roads**  
+  - Cars move according to the rules.  
+  - Each intersection (router) sends cars based on signs (forwarding table).  
+
+Control plane = **planning**  
+Data plane = **execution**  
+
+
+**Note** - Each router has its own data plane and control plane (unless using SDN). This means that each router makes its own forwarding decisions based on its control plane's routing computations and maintains its own forwarding table for packet handling.
+In short: each router has its own control plane and makes its own routing decisions.
+
+**Note** - In Software-Defined Networking (SDN), the control plane is moved out of routers and placed in a central software controller. Routing decisions and network logic are controlled by a central software controller, instead of each router calculating paths individually.Routers become simple forwarding devices (also called switches), while the controller does the “thinking.”
+
+## Network service model
+A Network Service Model defines the type of services the network layer provides to the transport layer or to the end-hosts.
+
+**In simple words:**
+
+- It describes how data packets will be treated while traveling from sender to receiver.
+
+**It answers questions like:**
+
+- Will packets be delivered reliably?
+
+- Will packets arrive in order?
+
+- Will the network guarantee speed or bandwidth?
+
+- Will packets be dropped or delayed?
+
+## Switching fabric
+A switching fabric is the internal network inside a router or switch that connects its input ports to its output ports. Think of it as the internal highway system that forwards packets from one port to another.
+
+### Types of  Switching Fabrics:
+
+1. **Memory-Based Switching Fabric:**
+   - CPU copies packet from input port → memory → output port
+   - Simple but can be slow due to memory access times.
+   - Slowest, limited by memory speed
+   - Used in old routers
+
+2. **Bus-Based Switching Fabric:**
+   - A shared bus (high-speed channel) connects all ports
+   - Input port places packet on bus → output port picks it
+   - Faster than memory-based
+   - But only one packet can use bus at a time → bottleneck
+   - Can become a bottleneck under heavy load.
+
+3. **Interconnection Network Fabric:**
+   - Uses a network of switches (like crossbar switches) to connect ports
+   - A grid of paths connecting all input ports to all output ports
+   - Multiple packets can be transferred in parallel
+   - Very high speed
+   - Scales better for high port counts
+   - More complex and expensive
+   - Used in high-performance routers and switches
+
+## Input port queueing
+
+Input Port Queueing (IPQ) occurs when incoming packets at a router/switch wait in a queue at the input port because the switching fabric or output port cannot handle them immediately.
+
+**Why Does It Happen?**
+
+When a packet arrives at an input port:
+
+- The router must look up the forwarding table.
+
+- Then the packet must move through the switching fabric to the correct output port.
+
+**If:**
+
+- the switching fabric is busy
+
+- or the output port is congested
+
+- or many packets want to go to the same output port
+
+- The input port holds the packets in a queue.
+
+
+### Head-of-Line (HOL) Blocking
+
+The first packet in the queue blocks others behind it, even if those packets could go to free output ports. This reduces throughput and causes delays.
+
+Example:
+
+- First packet waiting for Output Port 2
+
+- Packets behind it want Output Port 5 (which is free)
+
+- But they cannot move until the first one moves → BLOCKED
+
+Thus ultimately input port queueing can lead to HOL blocking, reducing overall router performance, packet loss, and increased delay.
+
+## Output port queueing
+Output Port Queuing (OPQ) occurs when packets are first transferred through the switching fabric and then wait in a queue at the output port before being transmitted on the outgoing link.
+
+**Why Does Output Port Queuing Happen?**
+
+A router/switch has:
+- Fast switching fabric
+- Slower output transmission line
+- If multiple packets arrive at the same output port at the same time, the link can transmit only one packet at a time.
+
+**So**:
+
+- Extra packets accumulate in the output buffer → output queueing
+
+So buffering is required at the output port when datagrams arrive from fabric faster than link transmission rate to hold packets waiting to be transmitted.
+
+Now if this buffer gets full, new incoming packets will be dropped, leading to packet loss.
+
+So advanced scheduling algorithms such as **FIFO, Priority Queuing, or Weighted Fair Queuing, Round Robin** are often used to manage output port queues effectively and ensure fair access to the output link.
+
+### Buffer management
+To prevent output port queue overflow and packet loss, routers implement buffer management techniques such as:
+
+- **Tail Drop:** Simple method where packets arriving at a full buffer are dropped.
+- **Prioritized Queuing:** Higher priority packets are transmitted first.
+- **Random Early Detection (RED):** Proactively drops packets before the buffer is full to signal congestion.
+- **Weighted Random Early Detection (WRED):** Similar to RED but considers packet priority for dropping decisions.
+- **Explicit Congestion Notification (ECN):** Marks packets instead of dropping them to signal congestion to endpoints.
+
+### Packet Scheduling
+Routers use scheduling algorithms to determine the order in which packets are transmitted from the output port queue. Common algorithms include:
+- **First-In-First-Out (FIFO):** Packets are transmitted in the order they arrive.
+- **Priority Queuing:** Packets are classified into different priority levels, and higher priority packets are transmitted first.
+- **Weighted Fair Queuing (WFQ):** Allocates bandwidth fairly among different flows based
+- **Round Robin:** Cycles through queues to give each flow a chance to transmit.
+
+**Network neutrality :**
+
+Network neutrality is the principle that all internet traffic should be treated equally by Internet Service Providers (ISPs), without discrimination or preferential treatment based on content, user, platform, application, or type of device.
+
+## The bigger picture of network layer- What ecactly happens
+
+**The Two Main Jobs of the Network Layer**
+1. **Forwarding** (Move packets from input port → output port inside a router)
+
+   - This is a per-router operation.
+   - Very fast. Hardware-based.
+
+2. **Routing** (Selecting the path packets will take across networks)
+
+   - This is a network-wide operation.
+   - Slower. Algorithm-based.
+
+**(A) Inside Each Router — What Happens?**
+
+Routers run the Network Layer on all input/output ports.
+
+**Step-by-step internal workflow:**
+1. Packet Arrives at Input Port
+
+   - Router receives an IP packet.
+
+   - Performs error checks.
+
+   - Removes Layer 2 header.
+
+2. Lookup the Destination IP
+
+   - Router checks forwarding table.
+
+   - Matches destination IP → finds the correct output port.
+
+3. Queueing
+
+   - Based on congestion:
+
+      - Input port queueing (if switching fabric is busy)
+
+      - Output port queueing (if outgoing link is slow or busy)
+4. Switching Fabric Transfers Packet
+
+   - Moves the packet from input → output port using:
+
+   - Memory-based switching
+
+   - Bus-based switching
+
+   - Crossbar switching (modern routers)
+5. Add New Link-Layer Header
+
+   - Output port adds a new Ethernet/PPP header for the next hop.
+
+6. Packet Sent Out
+
+   - Packet is transmitted on the outgoing link toward the next router.
+  
+**(B) Network-Wide — Routing Process**
+Routing algorithms run in the background:
+
+- OSPF (Link state)
+
+- RIP (Distance vector)
+
+- BGP (Between autonomous systems)
+
+These build the routing tables, which then generate forwarding tables.
+
+This gives the router a global or semi-global view of the network.
+
+## IP Addressing
+It is a 32-bit identifier associated with each host or router interface.
+
+### Subnet
+A subnet is a logically divided portion of an IP network, created by splitting a larger network into smaller subnetworks using a subnet mask.
+
+A subnet is just a smaller network inside a bigger network.
+
+
+Subnets are used to:
+
+- Reduce network congestion
+- Improve security by isolating departments
+- Use IP addresses more efficiently
+- Control broadcast traffic
+- Organize large networks like campuses or enterprises
+
+**Real Internet Example (College)**
+
+A college has ONE big network, e.g.:
+
+`10.0.0.0/8`
+
+
+But they divide it into smaller groups:
+
+`10.0.1.0/24` → CSE Dept
+
+`10.0.2.0/24` → ECE Dept
+
+`10.0.3.0/24` → Library
+
+`10.0.4.0/24` → Hostels
+
+These smaller groups are called subnets.
+
+**Why?** 
+
+To organize the network and reduce traffic.
+
+
+### CIDR Notation
+CIDR is a method of allocating IP addresses using variable-length subnet masks (VLSM), written in the format IP/prefix-length, which specifies how many bits represent the network part.
+
+Examples:
+
+- 192.168.1.0/24
+
+- 10.0.0.0/8
+
+- 172.16.5.0/27
+
+The prefix length tells how many bits are for the network part.
+
+#### What does 10.0.0.0/8 mean?
+
+The format is:
+
+**IP address / prefix length**
+
+So **10.0.0.0** is the **network address**,  
+and **/8** tells how many bits are used for the network part.
+
+
+#### 1. What is the meaning of 10.0.0.0?
+
+**10.0.0.0 is NOT a device IP.**  
+It is the **starting base address** of a whole network.
+
+Think of it like:
+
+- Roll number **1** identifies a whole class,  
+  not a specific student.
+
+Similarly:
+
+- **10.0.0.0** identifies the **entire network**, not a host.
+
+It is called the **Network ID**.
+
+#### 2. What does /8 mean?
+
+**/8 means:**
+
+- First **8 bits** → **network part**  
+- Remaining **24 bits** → **host part**
+
+IP addresses are 32 bits: `[ 8 bits: Network ][ 24 bits: Hosts ]`
+
+
+So **/8** tells you:
+
+- All addresses starting with **10.xxx.xxx.xxx**  
+belong to this network.
+
+---
+
+#### How big is the network 10.0.0.0/8?
+
+It includes all IPs from:
+
+**10.0.0.0 to 10.255.255.255**
+
+That is **16,777,216 IP addresses** (≈ 16 million).
+
+This whole block belongs to **private IP range**,  
+free to use inside any organization.
+
+---
+
+#### Why do colleges or companies use 10.0.0.0/8?
+
+Because:
+
+- /8 gives a **huge range** (16 million IPs)  
+- They can split it into **thousands of smaller subnets**  
+- It is **private**, so no ISP permission needed  
+
+It’s like getting **a big land plot** → then dividing it into **houses**, then **rooms**.
+
+---
+
+#### Subnetting the /8 block
+
+From the big block:
+
+**10.0.0.0/8**
+
+We divide it like:
+
+- **10.0.1.0/24** → CSE Dept  
+- **10.0.2.0/24** → ECE Dept  
+- **10.0.3.0/24** → Library  
+- **10.0.4.0/24** → Hostels  
+
+Each one is a **smaller subnet** inside the big /8.
+
+---
+
+#### Why these are /24 and not /8?
+
+Because:
+
+- **/24 = 256 IPs**  
+- Perfect size for a department  
+
+So the large **/8** is cut into many **/24** subnets.
+
+---
+
+#### Summary
+
+**Big network:** 10.0.0.0/8  
+- 16 million IPs  
+- Parent network  
+
+**Small networks:** 10.0.x.0/24  
+- 256 IPs each  
+- Child networks (subnets)  
+
+
+
+
+### **How does a host get an IP address within its network (host part)?**
+
+A host gets its IP address through DHCP (Dynamic Host Configuration Protocol) or by manual configuration. DHCP automatically assigns the host part of the address from the network’s available pool.
+
+### **How does a network get its IP address (network part)?**
+
+A network gets its IP address block from its ISP or Internet registries (RIRs). Private networks use reserved private IP ranges without needing official allocation.
+
+1. Assigned by ISP
+
+- For public IP networks:
+
+  - ISPs allocate a block of IP addresses (CIDR block) to organizations.
+
+  - Example: ISP gives 203.0.113.0/24 to a company.
+
+- The company can then subnet it internally.
+
+2. Assigned by Regional Internet Registries (RIRs)
+
+- If the organization is large (e.g., Google, Amazon, universities):
+
+  - They request IP blocks from RIRs like:
+
+    - APNIC (Asia Pacific — India)
+
+    - ARIN (North America)
+
+    - RIPE NCC (Europe)
+    - AFRINIC (Africa)
+
+    - LACNIC (Latin America)
+
+    - RIR assigns network prefixes like /12, /16, /20, etc.
+
+3. Private Networks Use Reserved Blocks (No ISP Required)
+
+- Inside LANs (home or office), networks use private IP ranges defined by RFC1918:
+
+  - 10.0.0.0/8
+
+  - 172.16.0.0/12
+
+  - 192.168.0.0/16
+
+- Routers automatically use these without requesting from ISP.
+
+### DHCP client server interaction
+1. **DHCP Discover:** Client broadcasts a DHCP Discover message to find available DHCP servers.
+2. **DHCP Offer:** DHCP servers respond with a DHCP Offer message, proposing an IP address and configuration.
+3. **DHCP Request:** Client selects an offer and sends a DHCP Request message to the chosen server, requesting the offered IP address.
+4. **DHCP Acknowledgment:** The DHCP server sends a DHCP Acknowledgment message, confirming the IP address assignment and providing additional configuration details.
+
+![DHCP](/images/DHCP.png)
+
+
+So basically DHCP assigns IP addresses dynamically to hosts within a private network, managing the host part of the IP address while the network part is assigned by ISPs or RIRs.
+
+### Network Address Translation (NAT)
+
+Network Address Translation (NAT) is a technique used by routers to translate private IP addresses inside a local network to a single public IP address before sending traffic to the Internet.
+
+So exactly what NAT does (detailed explanation):
+
+1. **All devices in your home/college use private IP addresses**
+
+   - Examples of private ranges:
+
+   - 10.0.0.0 – 10.255.255.255 → (10/8)
+
+   - 172.16.0.0 – 172.31.255.255 → (172.16/12)
+
+   - 192.168.0.0 – 192.168.255.255 → (192.168/16)
+
+  - These IPs can only be used inside your local network (LAN).
+
+  - **Example inside home:**
+
+    - Laptop: 192.168.1.10  
+    - Phone : 192.168.1.11  
+    - TV    : 192.168.1.12
+
+
+    - These cannot be used on the Internet.
+
+  - **WHY?**
+
+    - Because private IPs are not globally unique and are meant only for internal use.
+
+2. **NAT allows ALL devices to share ONE public IP**
+
+- Your ISP gives you one public IP, example:
+
+  - `103.56.22.9`
+
+
+- But you have many devices:
+
+  - 192.168.1.10 (laptop)
+  - 192.168.1.11 (phone)
+  - 192.168.1.12 (TV)
+  - 192.168.1.13 (tablet)
+
+- NAT converts all their private IPs to the ONE public IP.
+
+- This is called "**IP address sharing**".
+
+**Advantages:**
+- **Only ONE public IP needed**
+
+  - Without NAT:
+    - You would need public IP for each device → impossible + costly.
+
+  - With NAT:
+    - All private devices → share 1 public IP.
+
+- **You can change private IPs anytime**
+
+  - Example:
+
+    - Change:
+
+    - 192.168.1.10 → 192.168.1.50
+
+
+  - Internet won’t know or care.
+
+  - Why?
+
+    - Because outside world only sees your public IP, not the private IP.
+
+- **You can change ISP without changing internal IPs**
+
+  - Your internal network:
+
+    - 10.0.0.0/24
+
+
+  - stays same even if your ISP changes your public IP from:
+
+    - 103.88.20.5 → 49.36.112.7
+  - Your laptop still stays 10.0.0.5 inside the network.
+  - Only NAT maps it to the new public IP.
+
+- **Security**
+
+- **Devices inside your LAN cannot be directly accessed from the Internet.**
+
+  - For example:
+    - Your laptop: 192.168.1.10
+
+  - Someone from outside cannot directly reach:
+
+    - 192.168.1.10:80
+
+
+  - Because this IP is not visible outside your home.
+
+  - NAT protects your devices by hiding internal IPs.
+
+
+## IPv6 and Tunneling
+
+### Why IPv6?
+
+IPv4 has only 32-bit addresses (about 4.3 billion). They got exhausted, so IPv6 was introduced.
+
+### What is IPv6?
+
+- 128-bit addresses  
+- Example: `2001:0db8:85a3:0000:0000:8a2e:0370:7334`  
+- Huge address space  
+- No need for NAT  
+- Faster routing, auto-configuration, IPSec built-in  
+
+### IPv4 and IPv6 Compatibility Issue
+
+- IPv4 and IPv6 are **incompatible**; many networks still support only IPv4.  
+- So IPv6 packets cannot travel through IPv4 networks directly.
+
+### What is IPv6 Tunneling?
+
+**Tunneling = sending IPv6 packets inside IPv4 packets.**
+
+This allows IPv6 networks to communicate across IPv4-only routers.
+
+### Why Tunneling?
+
+Because the world is transitioning from IPv4 → IPv6 slowly.  
+Tunneling ensures compatibility without breaking existing networks.
+
+### Types of Tunneling
+
+1. **Manual Tunneling**:  Admin configures IPv4 endpoints and routes manually.
+
+2. **6to4 Tunneling**:  Automatic tunneling using the `2002::/16` IPv6 prefix.
+
+3. **Teredo**: Encapsulates IPv6 inside UDP over IPv4. Works through NAT.
+
+4. **ISATAP**: Used inside enterprises. Treats IPv4 network as virtual IPv6 link.
+
+### How Tunneling Works (Simple)
+
+1. IPv6 host creates IPv6 packet  
+2. Router wraps it inside an IPv4 header  
+3. IPv4 network transports it  
+4. Remote router unwraps it  
+5. IPv6 packet reaches destination  
+
+## OpenFlow vs Flow Table Abstraction
+
+### Flow Table Abstraction (Concept)
+
+Flow table abstraction is a **general SDN concept** where packet forwarding is defined using flow entries.
+
+A flow entry consists of:
+- **Match fields** (src IP, dst IP, MAC, TCP port, VLAN, etc.)
+- **Actions** (forward, drop, modify, send to controller)
+- **Counters** (packet/byte statistics)
+
+It is an **abstraction**, meaning it describes *how* forwarding logic should work without defining the exact protocol.  
+This concept exists even outside OpenFlow (e.g., P4, Cisco ACI, OVSDB).
+
+### What is OpenFlow?
+
+OpenFlow is a **specific protocol** used in SDN.  
+It implements the **flow table abstraction** in a standardized way.
+
+OpenFlow defines:
+- Structure of flow tables  
+- Allowed match fields  
+- Allowed actions  
+- Messages between controller ↔ switch (FlowMod, PacketIn, Stats, etc.)
+
+OpenFlow = **the first and most widely known implementation** of the flow-table idea.
+
+
+### Key Differences
+
+| Feature | Flow Table Abstraction | OpenFlow |
+|--------|-------------------------|----------|
+| Type | Concept / idea | Real protocol / implementation |
+| Purpose | Describe how flows should work | Allow controller to program switches |
+| Where used | General SDN theory | SDN systems using OpenFlow |
+| Defines match fields? | Conceptually | Precisely (OpenFlow spec) |
+| Defines actions? | Conceptually | Strictly defined formats |
+| Relationship | Parent idea | Child implementation |
+| Device requirement | Any SDN model | Requires OpenFlow-capable switch |
+
+
+
+### Simple Summary
+
+- **Flow Table Abstraction** = the **idea** of using match + action rules for forwarding.  
+- **OpenFlow** = the **protocol** that implements this idea in real networks.
+
+
+## Routing Protocols: Distance Vector vs Link State
+
+Routing protocols decide how routers discover paths and build routing tables.  
+They fall into two main categories: **Distance Vector** and **Link State**.
+
+
+### 1. Distance Vector Routing Protocols
+
+#### **Idea**
+Routers share routing information with **neighbors only**.  
+They advertise the **distance (metric)** to each known network.
+
+#### **Algorithm**
+- Bellman–Ford algorithm
+
+#### **How It Works**
+- Router sends its full routing table to neighbors  
+- Neighbors update their own tables  
+- Updates occur periodically
+
+#### **Examples**
+- RIP  
+- IGRP  
+
+#### **Advantages**
+- Simple  
+- Low CPU and memory usage  
+
+#### **Disadvantages**
+- Slow convergence  
+- Routing loops possible  
+- Poor scalability
+
+
+
+### 2. Link State Routing Protocols
+
+#### **Idea**
+Routers share **link-state information with all routers** in the network.  
+Each builds a **complete network topology map**.
+
+#### **Algorithm**
+- Dijkstra’s SPF (Shortest Path First)
+
+#### **How It Works**
+- Routers measure link costs  
+- Flood LSAs (Link State Advertisements)  
+- Each router computes best paths using SPF  
+
+#### **Examples**
+- OSPF  
+- IS-IS  
+
+#### **Advantages**
+- Fast convergence  
+- Loop-free  
+- Scalable for large networks  
+
+#### **Disadvantages**
+- Higher CPU and memory usage  
+- More complex to implement  
+
+
+
+### Difference Table
+
+| Feature | Distance Vector | Link State |
+|---------|------------------|------------|
+| Algorithm | Bellman–Ford | Dijkstra (SPF) |
+| Info shared | With neighbors | With all routers |
+| View of network | Partial | Complete |
+| Convergence | Slow | Fast |
+| Routing loops | Possible | Rare |
+| Examples | RIP, IGRP | OSPF, IS-IS |
+| Resource usage | Low | High |
+| Scalability | Small networks | Medium–large |
+| Update type | Periodic table updates | Triggered LSAs |
+
+
+
+### Summary
+**Distance Vector = simple, slow, neighbor-based.**  
+**Link State = fast, scalable, full-topology awareness.**
+
+## OSPF (Open Shortest Path First)
+
+OSPF is a **link-state Interior Gateway Protocol (IGP)** used for routing within an Autonomous System.  
+It uses **Dijkstra’s SPF algorithm** and maintains a complete map of the network.
+
+### Key Features
+- Link-state protocol  
+- Uses Dijkstra’s algorithm  
+- Fast convergence  
+- Supports hierarchical design with **areas**  
+- Uses **cost** as metric  
+- Open standard  
+- Floods LSAs to all routers in an area  
+
+### How OSPF Works
+1. Routers discover neighbors  
+2. Exchange link-state information  
+3. Build Link-State Database (LSDB)  
+4. Run Dijkstra’s SPF  
+5. Install best routes in routing table  
+
+### Advantages
+- Fast and reliable  
+- Highly scalable  
+- Loop-free  
+- Vendor-independent  
+
+### Disadvantages
+- More complex than RIP  
+- Requires more CPU and memory  
+
+### Summary
+**OSPF = Link-state + Dijkstra + Fast + Scalable + Uses areas.**
+
+
+
+# Link Layer (Part- 5)
+
+The Link Layer is responsible for reliable data transfer across a single physical link in a network. It provides services such as framing, MAC addressing, error detection, flow control, and medium access control. Protocols like Ethernet and WiFi operate at this layer. It ensures **hop-by-hop** delivery by encapsulating IP packets into frames.
+
+The Link Layer delivers data between two directly connected devices using frames and MAC addresses, not across the whole internet.
+
+**Example-**
+
+- Imagine your laptop is connected to your WiFi router.
+
+- These two devices are directly connected via WiFi.
+
+- You want to open google.com.
+
+- Step-by-step (Link Layer’s Part Only)
+  1. **Your laptop wants to send a packet to Google.**
+
+  - But the packet must go through the router first.
+
+  2. **Laptop asks: “What is my router’s MAC address?”**
+
+  - It uses ARP to find the MAC address of the router.
+
+    - **Imagine:**
+
+      - Router’s MAC = AA:BB:CC:11:22:33
+      - Laptop’s MAC = 88:99:AA:77:66:55
+
+  3. **Laptop creates a FRAME**
+
+     - **Frame contains:**
+
+       - Destination MAC = Router MAC
+
+       - Source MAC = Laptop MAC
+
+       - Inside: the IP packet for Google
+
+  4. **Laptop sends the frame → Router**
+
+This is a local hop, so only MAC addresses are used.
+
+The Internet is NOT involved yet.
+
+**Important Point**
+
+Even though the laptop wants to communicate with Google,
+the Link Layer only helps the laptop communicate with the ROUTER,
+because that is the next device in the path.
+
+This is why Link Layer = hop-by-hop delivery only.
+
+
+**Note**: In each and every host, the link layer is implementd on chip or Network Interface Card (NIC) to handle local delivery over physical links like Ethernet or WiFi.
+
+## Feature
+
+The Link Layer (Layer 2 of OSI model) is responsible for hop-by-hop delivery between directly connected devices. Here are its key functions:
+
+
+### 1. Framing
+Encapsulates network-layer packets (IP packets) into frames.  
+A frame includes a header, payload, and trailer.
+
+
+### 2. MAC Addressing
+Uses 48-bit MAC addresses to deliver frames within the same LAN.  
+Ensures local (hop-by-hop) communication between devices.
+
+
+### 3. Error Detection
+Detects corrupted frames using:
+- CRC (Cyclic Redundancy Check)
+- Checksums
+
+Corrupted frames are discarded.
+
+
+### 4. Error Correction (Optional)
+Some link-layer technologies (like WiFi) correct small bit errors.
+
+
+
+### 5. Flow Control (Optional)
+Prevents a fast sender from overwhelming a slower receiver.  
+Examples: Ethernet PAUSE frames, WiFi rate control.
+
+
+### 6. Medium Access Control (MAC Protocols)
+Controls how devices share the communication channel.  
+Examples:
+- Ethernet: CSMA/CD
+- WiFi: CSMA/CA
+- Token Ring: Token passing
+
+
+### 7. Hop-by-Hop Delivery
+Ensures frames move from one device to the next (e.g., Laptop → Router).
+
+## Internet Checksum and Cyclic Redundancy Check (CRC)
+
+
+### 1. Internet Checksum
+
+#### **Purpose**
+Detect simple bit errors in packets (used in TCP, UDP, IP).
+
+#### **How It Works**
+1. Split data into 16-bit words  
+2. Add all words using 1’s complement addition  
+3. Take 1’s complement → this becomes the checksum  
+4. Receiver adds all words + checksum  
+5. If result = all 1’s → no error; else → error detected
+
+#### **Features**
+- Simple  
+- Low computation  
+- Detects basic errors  
+- Not very strong (cannot detect burst errors well)
+
+#### **Used In**
+- IPv4 header  
+- TCP checksum  
+- UDP checksum  
+
+
+### 2. Cyclic Redundancy Check (CRC)
+
+#### **Purpose**
+Detect strong, complex, and burst errors in data frames.
+
+#### **How It Works**
+1. Treat data as a binary number  
+2. Append zeros (equal to size of generator polynomial)  
+3. Divide by generator polynomial using binary division  
+4. Remainder = CRC bits → appended to frame  
+5. Receiver divides again; if remainder = 0 → no error
+
+#### **Features**
+- Very strong error detection  
+- Catches:
+  - Single-bit errors  
+  - Double-bit errors  
+  - Odd number of bit errors  
+  - Burst errors  
+- Used in high-speed networks
+
+#### **Used In**
+- Ethernet  
+- WiFi (802.11)  
+- PPP, HDLC  
+
+
+### Internet Checksum vs CRC
+
+| Feature | Internet Checksum | CRC |
+|--------|--------------------|-----|
+| Type | Add + 1’s complement | Polynomial division |
+| Strength | Weak | Very strong |
+| Detects | Basic errors | Burst + complex errors |
+| Layers Used | Network/Transport (IP, TCP, UDP) | Link layer (Ethernet, WiFi) |
+| Hardware Needed | Very simple | Slightly complex |
+| Error Correction | No | No |
+
+## Multiple Access Protocols: Point-to-Point and Broadcast
+
+Multiple access protocols define how nodes share a communication medium.  
+There are two types of link settings: **point-to-point** and **broadcast**.
+
+
+### 1. Point-to-Point Links
+
+#### **Definition**
+A point-to-point link connects **exactly two devices**.  
+Since only two nodes use the channel, there is **no contention**.
+
+#### **Examples**
+- PPP (Point-to-Point Protocol)
+- HDLC
+- Direct fiber or serial links
+- Router-to-router WAN link
+
+#### **Features**
+- No collisions  
+- No need for CSMA/CD or CSMA/CA  
+- Simple link access  
+- Handles framing, error detection, and control efficiently  
+
+
+
+### 2. Broadcast (Shared) Links
+
+#### **Definition**
+A single shared channel used by **multiple devices**.  
+Nodes must coordinate who sends data, or collisions occur.
+
+#### **Examples**
+- Ethernet LAN
+- WiFi (802.11)
+- Cable networks
+- Satellite networks
+
+
+### Types of Broadcast Multiple Access Protocols
+
+#### **A. Random Access Protocols**
+Nodes transmit whenever they want → collisions may happen.
+
+- ALOHA  
+- Slotted ALOHA  
+- CSMA (Carrier Sense Multiple Access)  
+- CSMA/CD (Ethernet)  
+- CSMA/CA (WiFi)
+
+
+#### **B. Controlled Access Protocols**
+Access is coordinated → no collisions.
+
+- Token Ring  
+- Token Bus  
+- Polling  
+
+#### **C. Channelization Protocols or Channel partitioning**
+Channel is divided among users.
+
+- FDMA (Frequency Division Multiple Access)  
+- TDMA (Time Division Multiple Access)  
+- CDMA (Code Division Multiple Access)  
+
+---
+
+### Point-to-Point vs Broadcast (Comparison)
+
+| Feature | Point-to-Point | Broadcast |
+|--------|----------------|-----------|
+| Number of devices | 2 | Many |
+| Collisions | No | Yes |
+| Examples | PPP, HDLC | Ethernet, WiFi |
+| Need for multiple access protocol | No | Yes |
+| Complexity | Low | High |
+| Access control method | Not required | CSMA/CD, CSMA/CA, TDMA, etc. |
+
+
+
+### Summary
+
+Point-to-point links connect two nodes and require no multiple access coordination.  
+Broadcast links connect many nodes, so multiple access protocols such as ALOHA, CSMA/CD, CSMA/CA, TDMA, and FDMA are required to avoid collisions and manage shared channel access.
+
+
+## Channel partitioning protocols
+Channel partitioning protocols divide the communication channel into separate parts so multiple users can transmit simultaneously without interference. This is essential in broadcast networks where many devices share the same medium.
+
+
+### 1. FDMA (Frequency Division Multiple Access)
+
+#### **Definition**
+The available channel bandwidth is divided into **multiple frequency bands**, and each user is assigned a **separate frequency**.
+
+#### **How It Works**
+Each user transmits **at a different frequency**, so signals do not interfere.
+
+#### **Examples**
+- Radio broadcasting  
+- Analog cellular systems  
+- Satellite communication  
+
+#### **Features**
+- No collisions  
+- Requires guard bands  
+- Simple but less efficient  
+- Works well for continuous signals  
+
+
+
+### 2. TDMA (Time Division Multiple Access)
+
+#### **Definition**
+The channel is divided into **time slots**, and each user gets a **specific time slot** to transmit.
+
+#### **How It Works**
+Users transmit **one at a time**, in repeated cycles.
+
+`| A | B | C | A | B | C | ...`
+
+
+#### **Examples**
+- GSM (2G mobile network)  
+- Digital wireless systems  
+
+#### **Features**
+- No collisions  
+- Requires clock synchronization  
+- Wastes time slots when a user has no data  
+- Medium efficiency  
+
+
+
+### 3. CDMA (Code Division Multiple Access)
+
+#### **Definition**
+All users transmit **at the same time** and **in the same frequency**, but each user is assigned a **unique code**.
+
+#### **How It Works**
+Signals are spread using unique orthogonal codes.  
+Receiver uses the same code to extract the correct signal.
+
+#### **Examples**
+- 3G networks  
+- GPS  
+- Secure military communication  
+
+#### **Features**
+- Very high capacity  
+- Resistant to interference  
+- Secure (code-based separation)  
+- Complex to implement  
+
+
+
+---
+
+### FDMA vs TDMA vs CDMA (Comparison)
+
+| Feature | FDMA | TDMA | CDMA |
+|--------|-------|-------|-------|
+| How channel is shared | Frequency | Time slots | Codes |
+| Collisions | No | No | No |
+| Synchronization | Low | High | High (code sync) |
+| Efficiency | Low | Medium | High |
+| Used in | Analog phones, radio | GSM (2G) | 3G, GPS |
+
+---
+
+### Summary
+
+FDMA divides the channel by **frequency**, TDMA divides it by **time**, and CDMA divides it by **codes**.  
+All three allow multiple users to share the medium **without collisions**, but CDMA is the most efficient and advanced.
+
+## Random Access Protocols
+
+Random access protocols allow nodes to transmit **whenever they have data**, without prior coordination.  
+However, this can lead to **collisions**, so different protocols define how to detect, avoid, or reduce them.
+
+
+### 1. Pure ALOHA
+
+#### **Definition**
+Nodes transmit **immediately** when they have data, without sensing the channel.
+
+#### **Collision Handling**
+- Collisions can happen anytime.
+- If collision → the node waits a random time and retransmits.
+
+#### **Efficiency**
+- Maximum efficiency: **18%**
+
+#### **Features**
+- Very simple  
+- High collision rate  
+- Used in early satellite networks  
+
+
+
+### 2. Slotted ALOHA
+
+#### **Definition**
+The channel time is divided into **slots**, and nodes can transmit **only at the start of a slot**.
+
+#### **Collision Handling**
+- Collisions still occur, but only if two nodes transmit in the same slot.
+
+#### **Efficiency**
+- Maximum efficiency: **37%** (double Pure ALOHA)
+
+#### **Features**
+- Requires time synchronization  
+- Reduces but does not remove collisions  
+
+
+
+### 3. CSMA (Carrier Sense Multiple Access)
+
+#### **Definition**
+Before transmitting, a node **listens to the channel**.  
+If the channel is idle → transmit  
+If busy → wait
+
+#### **Features**
+- Reduces collisions  
+- Still possible due to propagation delay  
+- More efficient than ALOHA  
+
+#### **Types**
+- **1-persistent**  
+- **Non-persistent**  
+- **p-persistent**  
+
+
+
+### 4. CSMA/CD (Carrier Sense Multiple Access with Collision Detection)
+
+#### **Definition**
+Nodes listen before and **during transmission**.  
+If a collision is detected → stop immediately and send a **jam signal**.
+
+#### **Used In**
+- **Wired Ethernet** (Traditional shared Ethernet)
+
+#### **Features**
+- Minimizes time wasted during collisions  
+- Not usable in wireless (cannot detect collisions while sending)  
+
+
+
+### 5. CSMA/CA (Carrier Sense Multiple Access with Collision Avoidance)
+
+#### **Definition**
+Nodes try to **avoid collisions** before they happen using:
+- RTS/CTS (Request to Send / Clear to Send)
+- Random backoff timers
+- Acknowledgments (ACKs)
+
+#### **Used In**
+- **WiFi (802.11)**
+
+#### **Features**
+- Collision avoidance instead of detection  
+- Works well for wireless networks  
+- Handles hidden terminal and exposed terminal problems  
+
+
+
+---
+
+### Comparison of Random Access Protocols
+
+| Protocol | Sense Before Sending? | Detect Collision? | Avoid Collision? | Used In |
+|----------|------------------------|----------------------------|-----------------------------|---------------|
+| Pure ALOHA | No | No | No | Early satellite |
+| Slotted ALOHA | No (but time-slotted) | No | No | RFID, wireless |
+| CSMA | Yes | No | Partially | LAN, wired/wireless |
+| CSMA/CD | Yes | Yes | No | Ethernet |
+| CSMA/CA | Yes | No | Yes | WiFi (802.11) |
+
+---
+
+### Summary
+
+Random access protocols let nodes transmit freely, but collisions must be handled.  
+ALOHA is the simplest, CSMA reduces collisions, CSMA/CD detects them (Ethernet), and CSMA/CA avoids them (WiFi).
+
+
+## Controlled Access Protocols
+
+Controlled access protocols ensure that **only one node transmits at a time**, preventing collisions.  
+These protocols coordinate transmission by giving **explicit permission** to each node.
+
+
+### 1. Token Ring
+
+#### **Definition**
+Nodes are connected in a **logical ring**, and a special small frame called a **token** circulates around the ring.  
+A node can transmit **only when it captures the token**.
+
+#### **How It Works**
+1. Token circulates from node to node.  
+2. Node seizes the token → sends data.  
+3. After sending, node releases the token back into the ring.  
+
+#### **Features**
+- Collision-free  
+- Predictable access time  
+- Requires maintaining the ring  
+- Used in older LAN technologies (IEEE 802.5)  
+
+
+
+### 2. Token Bus
+
+#### **Definition**
+Nodes are connected in a **physical bus**, but organized in a **logical ring**.  
+The token is passed according to **logical order**, not physical position.
+
+#### **How It Works**
+- Token is sent following a predefined logical node sequence.
+- Only the node holding the token can transmit.
+
+#### **Features**
+- No collisions  
+- Good for industrial networks  
+- More flexible topology than Token Ring  
+
+
+
+### 3. Polling (Master–Slave)
+
+#### **Definition**
+A **central master** (controller) asks each node **one by one** if it has data to send.
+
+#### **How It Works**
+1. Master sends “poll” to a node  
+2. If node has data → sends it  
+3. Master polls the next node  
+4. Repeats round-robin  
+
+#### **Features**
+- No collisions  
+- Simple and predictable  
+- Single point of failure (master)  
+- Delay increases as number of nodes grows  
+
+
+
+---
+
+### Comparison of Controlled Access Protocols
+
+| Protocol | Topology | Who Controls Access? | Collisions? | Used In |
+|----------|-----------|---------------------------|----------------|------------------------------|
+| Token Ring | Logical Ring | Token | No | Older LAN (IEEE 802.5) |
+| Token Bus | Physical Bus / Logical Ring | Token | No | Industrial networks |
+| Polling | Any | Central Master | No | Low-speed links, WiFi power-saving |
+
+---
+
+### Summary
+
+Controlled access protocols eliminate collisions by giving explicit permission for transmission.  
+Token Ring and Token Bus use circulating tokens, while Polling uses a central master to grant transmission rights.
+
+## Summary of MAC (Medium Access Control) Protocols
+
+MAC protocols determine how multiple devices share a communication channel.  
+They are grouped into **three major categories**:
+
+
+### 1. Random Access Protocols
+
+Devices transmit **whenever they want**, so **collisions can occur**.
+
+#### **Examples**
+- Pure ALOHA  
+- Slotted ALOHA  
+- CSMA  
+- CSMA/CD (Ethernet)  
+- CSMA/CA (WiFi)
+
+#### **Key Idea**
+“Try to send — if collision happens, handle or avoid it.”
+
+#### **Pros**
+- Simple  
+- Good for low traffic
+
+#### **Cons**
+- Collisions → wasted time  
+- Efficiency reduces under high load
+
+
+
+### 2. Channel Partitioning Protocols (Channelization)
+
+The channel is **divided among users**, so **no collisions** occur.
+
+#### **Examples**
+- TDMA (Time Division)  
+- FDMA (Frequency Division)  
+- CDMA (Code Division)
+
+#### **Key Idea**
+“Give each user a fixed portion of the channel.”
+
+#### **Pros**
+- Collision-free  
+- Fair and predictable
+
+#### **Cons**
+- Inefficient when few users are active  
+- Requires synchronization or complex coding
+
+
+
+### 3. Controlled Access Protocols (Taking Turns)
+
+Devices **take turns** transmitting under coordination → **no collisions**.
+
+#### **Examples**
+- Token Ring  
+- Token Bus  
+- Polling (Master–Slave)
+
+#### **Key Idea**
+“Nodes transmit only when allowed.”
+
+#### **Pros**
+- Collision-free  
+- Predictable access (good for real-time systems)
+
+#### **Cons**
+- Overhead (token passing, polling)  
+- Slow if many nodes  
+- Single point of failure in polling
+
+
+
+---
+
+### **One-Line Summary**
+
+- **Random Access** → Send anytime; collisions possible  
+- **Channel Partitioning** → Divide channel; no collisions  
+- **Controlled Access** → Take turns; no collisions
+
+
+## DOCSIS (Data Over Cable Service Interface Specification)
+
+DOCSIS is a standard that enables **high-speed Internet over cable TV (CATV) networks**.  
+It allows ISPs to deliver broadband using the same coaxial cables used for television.
+
+### Key Points
+- Used in cable Internet services  
+- Communication happens between:
+  - **Cable Modem** (home)
+  - **CMTS** – Cable Modem Termination System (ISP)
+- Works on Hybrid Fiber-Coaxial (HFC) networks  
+- Supports both upstream and downstream data
+
+### DOCSIS Versions (Speeds)
+- **3.0:** Up to 1 Gbps  
+- **3.1:** Up to 10 Gbps  
+
+### Summary
+DOCSIS makes it possible to provide fast Internet without replacing old cable TV infrastructure.
+
+
+## Difference Between Switch and Router
+
+| Feature | Switch | Router |
+|---------|---------|---------|
+| OSI Layer | Layer 2 (Data Link) | Layer 3 (Network) |
+| Uses | MAC addresses | IP addresses |
+| Purpose | Connects devices within a LAN | Connects different networks (LAN → WAN/Internet) |
+| Forwarding Basis | MAC address table | Routing table |
+| Collision Domains | Each port is a separate collision domain | Each interface is a separate collision domain |
+| Broadcast Domains | One broadcast domain (unless VLANs) | Breaks broadcast domains |
+| NAT Support | No | Yes |
+| Routing Protocols | No | Yes (OSPF, RIP, BGP) |
+| Packet Type | Forwards frames | Forwards packets |
+| Speed | Very fast (hardware switching) | Slightly slower (routing logic) |
+| Typical Use | LAN switching | Internet & inter-network communication |
+
+## VLAN (Virtual Local Area Network)
+
+A **VLAN (Virtual LAN)** is a method of logically dividing a physical LAN into multiple separate networks.  
+Even if devices are connected to the same physical switch, VLANs keep their traffic isolated.
+
+### **Key Features**
+- Creates **separate broadcast domains**
+- Improves **security** by isolating departments or groups
+- Reduces **broadcast traffic**
+- Allows **logical grouping** of users regardless of physical location
+- Simplifies **network management**
+
+### **How VLAN Works**
+A managed switch assigns specific ports to specific VLANs.
+
+Example:
+- Ports 1–5 → VLAN 10  
+- Ports 6–10 → VLAN 20  
+
+Devices in different VLANs **cannot communicate** unless connected through a router or Layer-3 switch.
+
+### **Summary**
+VLANs divide a large physical network into smaller, isolated logical networks to increase security, reduce traffic, and simplify management.
+
+
+## MPLS (Multiprotocol Label Switching)
+
+MPLS is a high-speed packet forwarding technology that uses **short labels** instead of long IP address lookups.  
+It operates between Layer 2 and Layer 3, often called **Layer 2.5**.
+
+### **Key Features**
+- Uses labels for fast forwarding  
+- Predefined paths called **Label Switched Paths (LSPs)**  
+- Supports traffic engineering and QoS  
+- Works with multiple protocols (IP, Ethernet, PPP)
+
+### **How MPLS Works**
+1. The **ingress router** adds a label to the packet.  
+2. **Label Switch Routers (LSRs)** forward the packet based only on the label.  
+3. The **egress router** removes the label and sends the packet normally.
+
+### **Benefits**
+- Faster forwarding than IP routing  
+- Supports MPLS VPNs  
+- Enables traffic engineering  
+- Provides high reliability and fast reroute  
+
+### **Summary**
+MPLS is a label-based forwarding system that improves speed, supports VPNs, and enhances traffic control in large networks.
